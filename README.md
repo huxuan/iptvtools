@@ -1,10 +1,8 @@
 # iptv-m3u-filter
 
-Filter iptv m3u playlist for customization.
-
 Quite a few publicly available IPTV channels can be found on the Internet, but usually only a part of them is valuable considering accessibility, resolution, latency, bandwidth and some other criteria.
 
-This script aims to help with that filtering process.
+This script aims to help with the filtering purpose.
 
 ## Prerequisites
 
