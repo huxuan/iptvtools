@@ -20,13 +20,11 @@ PROBE_COMMAND = (
 
 def probe(url, timeout=None):
     outs = None
-    with Popen(f'{PROBE_COMMAND} {url}'.split(),
-               stdout=PIPE,
-               stderr=PIPE) as proc:
-        try:
-            outs, dummy = proc.communicate(timeout=timeout)
-        except TimeoutExpired:
-            proc.kill()
+    proc = Popen(f'{PROBE_COMMAND} {url}'.split(), stdout=PIPE, stderr=PIPE)
+    try:
+        outs, dummy = proc.communicate(timeout=timeout)
+    except TimeoutExpired:
+        proc.kill()
     if outs:
         try:
             return json.loads(outs.decode('utf-8'))

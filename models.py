@@ -6,12 +6,12 @@ Author: huxuan
 Email: i(at)huxuan.org
 Description: Simplified M3U8 and other related models.
 """
-
-
 from concurrent import futures
 from concurrent.futures import ThreadPoolExecutor
-from tags import Tags
+
 from tqdm import tqdm
+
+from tags import Tags
 import parsers
 import utils
 
@@ -63,7 +63,8 @@ class M3U8():
                     for url in self.data}
 
                 for future in tqdm(futures.as_completed(future_dict),
-                                   total=len(future_dict)):
+                                   total=len(self.data),
+                                   ascii=True):
                     stream_info = future.result()
                     url = future_dict[future]
                     if stream_info:
