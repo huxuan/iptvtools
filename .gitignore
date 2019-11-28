@@ -105,3 +105,4 @@ venv.bak/
 
 # Custom
 *.m3u
+.vscode
