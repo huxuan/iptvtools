@@ -8,9 +8,9 @@ Description: Main entrance for iptv-m3u-filer.
 """
 import argparse
 
-from defaults import Defaults
-from helps import Helps
-from models import M3U8
+from iptv_m3u_filter.defaults import Defaults
+from iptv_m3u_filter.helps import Helps
+from iptv_m3u_filter.models import M3U8
 
 
 def parse_args():

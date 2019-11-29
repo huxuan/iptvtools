@@ -9,7 +9,7 @@ Description: Simplified parser for m3u8 file.
 from urllib.request import urlopen
 import os.path
 
-from patterns import Patterns
+from iptv_m3u_filter.patterns import Patterns
 
 
 def parse_content_to_lines(content):

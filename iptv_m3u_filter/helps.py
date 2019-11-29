@@ -6,7 +6,7 @@ Author: huxuan
 Email: i(at)huxuan.org
 Description: Help messages.
 """
-from defaults import Defaults
+from iptv_m3u_filter.defaults import Defaults
 
 
 class Helps:

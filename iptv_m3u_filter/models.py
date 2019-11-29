@@ -11,9 +11,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from tqdm import tqdm
 
-from tags import Tags
-import parsers
-import utils
+from iptv_m3u_filter import parsers
+from iptv_m3u_filter import utils
+from iptv_m3u_filter.tags import Tags
 
 
 class M3U8():
