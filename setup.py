@@ -4,40 +4,62 @@
 File: setup.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Python packaging for iptv-m3u-filter.
+Description: Python packaging for iptvtools.
 """
+from setuptools import find_packages
 from setuptools import setup
 
 DESCRIPTION = (
-    'A script to filter IPTV m3u playlists according to customized criteria.'
+    'A set of scripts that help to better IPTV experience.'
 )
+
+CLASSIFIERS = [
+    'Development Status :: 4 - Beta',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: Utilities'
+]
+
+INSTALL_REQUIRES = [
+    'tqdm'
+]
+
+DEV_REQUIRES = [
+    'pycodestyle',
+    'pyflakes',
+    'pylint'
+]
+
+EXTRAS_REQUIRE = {
+    'dev': DEV_REQUIRES
+}
 
 
 def readme():
+    """Parse README for long_description."""
     with open('README.md') as fin:
         return fin.read()
 
 
-setup(name='iptv_m3u_filter',
+setup(name='iptvtools',
       version='0.1',
       description=DESCRIPTION,
       long_description=readme(),
       long_description_content_type='text/markdown',
-      classifiers=[
-          'Development Status :: 4 - Beta',
-          'License :: OSI Approved :: MIT License',
-          'Programming Language :: Python :: 3'
-      ],
-      keywords='iptv m3u playlist filter',
-      url='https://github.com/huxuan/iptv-m3u-filter',
+      classifiers=CLASSIFIERS,
+      keywords='iptv m3u playlist tools filter',
+      url='https://github.com/huxuan/iptvtools',
       author='Xuan (Sean) Hu',
       author_email='i@huxuan.org',
       license='MIT',
-      packages=['iptv_m3u_filter'],
-      install_requires=[
-          'tqdm',
-      ],
+      packages=find_packages(),
+      install_requires=INSTALL_REQUIRES,
+      extras_require=EXTRAS_REQUIRE,
+      python_requires='>=3',
       entry_points={
-          'console_scripts': ['iptv-m3u-filter=iptv_m3u_filter.main:main'],
+          'console_scripts': [
+              'iptv-filter=iptvtools.iptv_filter:main'
+          ],
       },
       include_package_data=True)

@@ -9,38 +9,40 @@ Description: Simplified parser for m3u8 file.
 from urllib.request import urlopen
 import os.path
 
-from iptv_m3u_filter.patterns import Patterns
+from .constants import patterns
 
 
 def parse_content_to_lines(content):
+    """Universal interface to split content into lines."""
     if os.path.isfile(content):
         return _parse_from_file(content)
     return _parse_from_url(content)
 
 
 def parse_tag_inf(line):
-    match = Patterns.EXTINF.fullmatch(line)
-    return _transform_match_result(match)
+    """Parse INF content."""
+    match = patterns.EXTINF.fullmatch(line)
+    res = match.groupdict()
+    if 'params' in res:
+        res['params'] = dict(patterns.PARAMS.findall(res['params']))
+    return res
 
 
 def parse_tag_m3u(line):
-    match = Patterns.EXTM3U.fullmatch(line)
-    return _transform_match_result(match)
+    """Parse M3U content."""
+    match = patterns.EXTM3U.fullmatch(line)
+    return match.groupdict()
 
 
 def _parse_from_file(filename):
+    """Parse content from file."""
+    print(f'Retrieving playlists from file: {filename}')
     with open(filename, encoding='utf-8') as fin:
         return fin.read().splitlines()
 
 
 def _parse_from_url(url):
-    print(f'Retrieving playlists from {url}')
+    """Parse content from url."""
+    print(f'Retrieving playlists from url: {url}')
     with urlopen(url) as response:
         return response.read().decode('utf-8').splitlines()
-
-
-def _transform_match_result(match):
-    res = match.groupdict()
-    if res.get('params'):
-        res['params'] = dict(Patterns.PARAMS.findall(res['params']))
-    return res
