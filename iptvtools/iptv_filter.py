@@ -41,7 +41,7 @@ def main():
     playlist = Playlist()
     playlist.parse(args.input, args.udpxy)
     playlist.parse(args.template, is_template=True)
-    # playlist.filter(args.min_height)
+    playlist.filter(args.min_height)
     print(f'{len(playlist.data)} channels after filtering!')
     open(args.output, 'w', encoding='utf-8').write(str(playlist))
 
