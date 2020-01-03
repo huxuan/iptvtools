@@ -8,6 +8,7 @@ Description: Filter IPTV m3u playlists according to customized criteria.
 """
 import argparse
 
+from . import __version__
 from .config import Config
 from .constants import defaults
 from .constants import helps
@@ -31,6 +32,8 @@ def parse_args():
                         help=helps.TIMEOUT)
     parser.add_argument('-u', '--udpxy', default=defaults.UDPXY,
                         help=helps.UDPXY)
+    parser.add_argument('-v', '--version', action='version',
+                        version=__version__)
     return parser.parse_args()
 
 

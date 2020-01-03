@@ -1,5 +1,5 @@
 {
-    "id_filters": {
+    "id_unifiers": {
         "-": "",
         "IPTV": "",
         "BTV冬奥纪实": "北京纪实",
@@ -11,7 +11,7 @@
         "CETV4": "中国教育4台",
         "纪实频道": "上海纪实"
     },
-    "title_filters": {
+    "title_unifiers": {
         "高清": "",
         "HD": "",
         "＋": "+"

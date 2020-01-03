@@ -9,7 +9,7 @@ Description: Helps for iptvtools.
 from . import defaults
 
 CONFIG = (
-    f'Configuration file with title and id filter information, defaults to '
+    f'Configuration file to unify title and id information, defaults to '
     f'`{defaults.CONFIG}`'
 )
 INPUT = (

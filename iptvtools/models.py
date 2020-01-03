@@ -60,7 +60,7 @@ class Playlist():
                 continue
             if line.startswith(tags.INF):
                 current_item = parsers.parse_tag_inf(line)
-                current_item = utils.filter_title_and_id(current_item)
+                current_item = utils.unify_title_and_id(current_item)
             else:
                 if is_template:
                     self.template[current_item['id']] = current_item

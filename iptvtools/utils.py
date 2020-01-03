@@ -19,33 +19,39 @@ PROBE_COMMAND = (
     '-of json=c=1 -v quiet'
 )
 
+ACCEPT_SCHEME = (
+    'udp',
+    'rtp'
+)
+
 
 def convert_url_with_udpxy(orig_url, udpxy):
     """Convert url with udpxy."""
-    orig_url = orig_url.replace('///', '//')  # Hack to some abnormal urls.
+    orig_url = orig_url.replace('///', '//')  # Hack for some abnormal urls.
     parsed_url = urlparse(orig_url)
-    new_url = f'{udpxy}/{parsed_url.scheme}/{parsed_url.netloc}'
-    return new_url
+    if parsed_url.scheme in ACCEPT_SCHEME:
+        return f'{udpxy}/{parsed_url.scheme}/{parsed_url.netloc}'
+    return orig_url
 
 
-def filter_title_and_id(item):
-    """Filter title and id."""
-    for title_filter in sorted(Config().title_filters):
-        if title_filter in item['title']:
+def unify_title_and_id(item):
+    """Unify title and id."""
+    for title_unifier in sorted(Config().title_unifiers):
+        if title_unifier in item['title']:
             item['title'] = item['title'].replace(
-                title_filter,
-                Config().title_filters[title_filter])
+                title_unifier,
+                Config().title_unifiers[title_unifier])
 
     if 'tvg-name' in item.get('params'):
         item['id'] = item['params']['tvg-name']
     else:
         item['id'] = item['title']
 
-    for id_filter in sorted(Config().id_filters):
-        if id_filter in item['id']:
+    for id_unifier in sorted(Config().id_unifiers):
+        if id_unifier in item['id']:
             item['id'] = item['id'].replace(
-                id_filter,
-                Config().id_filters[id_filter])
+                id_unifier,
+                Config().id_unifiers[id_unifier])
 
     return item
 
