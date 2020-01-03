@@ -24,7 +24,7 @@ pyflakes:
 pylint:
 	-pylint setup.py iptvtools
 
-dist:
+dist: clean
 	python setup.py sdist bdist_wheel
 
 upload:

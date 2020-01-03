@@ -22,12 +22,12 @@ def parse_args():
                         help=helps.MIN_HEIGHT)
     parser.add_argument('-c', '--config', default=defaults.CONFIG,
                         help=helps.CONFIG)
-    parser.add_argument('-i', '--input', default=defaults.INPUT,
-                        help=helps.INPUT)
+    parser.add_argument('-i', '--input', action='append',
+                        default=[], help=helps.INPUT)
     parser.add_argument('-o', '--output', default=defaults.OUTPUT,
                         help=helps.OUTPUT)
-    parser.add_argument('-t', '--template', default=defaults.TEMPLATE,
-                        help=helps.TEMPLATE)
+    parser.add_argument('-t', '--template', action='append',
+                        default=[], help=helps.TEMPLATE)
     parser.add_argument('-T', '--timeout', default=defaults.TIMEOUT, type=int,
                         help=helps.TIMEOUT)
     parser.add_argument('-u', '--udpxy', default=defaults.UDPXY,
@@ -40,6 +40,8 @@ def parse_args():
 def main():
     """Main process."""
     args = parse_args()
+    if not args.input:
+        args.input = [defaults.INPUT]
     Config.init(args.config)
     playlist = Playlist()
     playlist.parse(args.input, args.udpxy)

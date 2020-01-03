@@ -43,31 +43,32 @@ class Playlist():
             res.append(url)
         return '\n'.join(res)
 
-    def parse(self, content, udpxy=None, is_template=False):
-        """Parse content."""
-        lines = parsers.parse_content_to_lines(content)
+    def parse(self, sources, udpxy=None, is_template=False):
+        """Parse content from sources."""
+        for source in sources:
+            lines = parsers.parse_content_to_lines(source)
 
-        if lines[0].startswith(tags.M3U):
-            res = parsers.parse_tag_m3u(lines[0])
-            if res.get('tvg-url'):
-                self.tvg_url = res.get('tvg-url')
-            lines = lines[1:]
+            if lines[0].startswith(tags.M3U):
+                res = parsers.parse_tag_m3u(lines[0])
+                if res.get('tvg-url'):
+                    self.tvg_url = res.get('tvg-url')
+                lines = lines[1:]
 
-        current_item = {}
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            if line.startswith(tags.INF):
-                current_item = parsers.parse_tag_inf(line)
-                current_item = utils.unify_title_and_id(current_item)
-            else:
-                if is_template:
-                    self.template[current_item['id']] = current_item
+            current_item = {}
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                if line.startswith(tags.INF):
+                    current_item = parsers.parse_tag_inf(line)
+                    current_item = utils.unify_title_and_id(current_item)
                 else:
-                    if udpxy:
-                        line = utils.convert_url_with_udpxy(line, udpxy)
-                    self.data[line] = current_item
+                    if is_template:
+                        self.template[current_item['id']] = current_item
+                    else:
+                        if udpxy:
+                            line = utils.convert_url_with_udpxy(line, udpxy)
+                        self.data[line] = current_item
 
     def filter(self, min_height=None, timeout=None):
         """Filter process."""

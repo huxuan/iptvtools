@@ -13,7 +13,8 @@ CONFIG = (
     f'`{defaults.CONFIG}`'
 )
 INPUT = (
-    f'Input playlist file/url, defaults to `{defaults.INPUT}`.'
+    f'Input playlist file/url, defaults to `[{defaults.INPUT}]`. Note that '
+    f'multiple input files/urls are supported.'
 )
 MIN_HEIGHT = (
     f'Minimal acceptable height/resolution, defaults to {defaults.MIN_HEIGHT}'
@@ -23,7 +24,8 @@ OUTPUT = f'Output playlist file name, defaults to `{defaults.OUTPUT}`.'
 TEMPLATE = (
     f'Template playlist file/url which have well-maintained channel '
     f'information to cooperate with EPG and will replace the corresponding '
-    f'entry (except url) if matched , defaults to `{defaults.TEMPLATE}`.'
+    f'entry (except url) if matched , defaults to `[]`. Note that multiple '
+    f'template files/urls are supported.'
 )
 TIMEOUT = (
     f'Acceptable timeout when retrieving stream information, defaults to '
