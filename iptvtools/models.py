@@ -69,14 +69,12 @@ class Playlist():
                         line = utils.convert_url_with_udpxy(line, udpxy)
                     self.data[line] = current_item
 
-    def filter(self, min_height=0):
+    def filter(self, min_height=None, timeout=None):
         """Filter process."""
-        flag_stream = min_height > 0
-        if flag_stream:
+        if min_height:
             urls = list(self.data.keys())
-            # for url in urls: # Mostly used for debug.
             for url in tqdm(urls, ascii=True):
-                stream_info = utils.probe(url)
+                stream_info = utils.probe(url, timeout)
                 if stream_info:
                     if utils.max_height(stream_info) < min_height:
                         self.data.pop(url)

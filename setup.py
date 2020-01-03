@@ -43,7 +43,7 @@ def readme():
 
 
 setup(name='iptvtools',
-      version='0.1',
+      version='0.1.1',
       description=DESCRIPTION,
       long_description=readme(),
       long_description_content_type='text/markdown',

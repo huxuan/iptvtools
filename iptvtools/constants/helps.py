@@ -13,15 +13,18 @@ CONFIG = (
     f'`{defaults.CONFIG}`'
 )
 INPUT = (
-    f'Valid M3U playlists, which could be a file or url, defaults to '
-    f'`{defaults.INPUT}`.'
+    f'Input playlist file/url, defaults to `{defaults.INPUT}`.'
 )
 MIN_HEIGHT = (
-    f'Minimal acceptable height/resolution, defaults to '
-    f'{defaults.MIN_HEIGHT} which means {defaults.MIN_HEIGHT}P.'
+    f'Minimal acceptable height/resolution, defaults to {defaults.MIN_HEIGHT}'
+    f'which means {defaults.MIN_HEIGHT}P. Set 0 to disable the filtering.'
 )
-OUTPUT = f'Output file name, defaults to `{defaults.OUTPUT}`.'
-TEMPLATE = f'Template file name, defaults to `{defaults.TEMPLATE}`.'
+OUTPUT = f'Output playlist file name, defaults to `{defaults.OUTPUT}`.'
+TEMPLATE = (
+    f'Template playlist file/url which have well-maintained channel '
+    f'information to cooperate with EPG and will replace the corresponding '
+    f'entry (except url) if matched , defaults to `{defaults.TEMPLATE}`.'
+)
 TIMEOUT = (
     f'Acceptable timeout when retrieving stream information, defaults to '
     f'{defaults.TIMEOUT}.'
