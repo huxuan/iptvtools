@@ -6,6 +6,7 @@ Author: huxuan
 Email: i(at)huxuan.org
 Description: Playlist which contains all the channels' information.
 """
+import os.path
 import sys
 
 from tqdm import tqdm
@@ -22,7 +23,8 @@ class Playlist():
         self.template = {}
         self.tvg_url = None
 
-    def __str__(self):
+    def export(self, args):
+        """Export playlist information."""
         res = []
         res.append(tags.M3U)
         if self.tvg_url is not None:
@@ -35,6 +37,8 @@ class Playlist():
             else:
                 entry = self.data[url]
             params_dict = entry.get('params', {})
+            if args.replace_group_by_source:
+                params_dict['group-title'] = self.data[url]['source']
             params = ' '.join([f'{key}="{value}"'
                                for key, value in params_dict.items()])
             res.append(
@@ -43,10 +47,16 @@ class Playlist():
             res.append(url)
         return '\n'.join(res)
 
-    def parse(self, sources, udpxy=None, is_template=False):
-        """Parse content from sources."""
+    def parse(self, args):
+        """Parse contents."""
+        self._parse(args.input, udpxy=args.udpxy)
+        self._parse(args.template, is_template=True)
+
+    def _parse(self, sources, udpxy=None, is_template=False):
+        """Internal implementation of parsing."""
         for source in sources:
             lines = parsers.parse_content_to_lines(source)
+            source_name = os.path.splitext(os.path.basename(source))[0]
 
             if lines[0].startswith(tags.M3U):
                 res = parsers.parse_tag_m3u(lines[0])
@@ -68,16 +78,18 @@ class Playlist():
                     else:
                         if udpxy:
                             line = utils.convert_url_with_udpxy(line, udpxy)
+                        # Only inputs need source.
+                        current_item['source'] = source_name
                         self.data[line] = current_item
 
-    def filter(self, min_height=None, timeout=None):
+    def filter(self, args):
         """Filter process."""
-        if min_height:
+        if args.min_height:
             urls = list(self.data.keys())
             for url in tqdm(urls, ascii=True):
-                stream_info = utils.probe(url, timeout)
+                stream_info = utils.probe(url, args.timeout)
                 if stream_info:
-                    if utils.max_height(stream_info) < min_height:
+                    if utils.max_height(stream_info) < args.min_height:
                         self.data.pop(url)
                 else:
                     self.data.pop(url)

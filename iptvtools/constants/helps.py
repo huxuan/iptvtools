@@ -21,6 +21,10 @@ MIN_HEIGHT = (
     f'which means {defaults.MIN_HEIGHT}P. Set 0 to disable the filtering.'
 )
 OUTPUT = f'Output playlist file name, defaults to `{defaults.OUTPUT}`.'
+REPLACE_GROUP_BY_SOURCE = (
+    f'Flag to indicate whether to replace the group title with source name, '
+    f'where source name is the basename of input files/urls without extension.'
+)
 TEMPLATE = (
     f'Template playlist file/url which have well-maintained channel '
     f'information to cooperate with EPG and will replace the corresponding '
