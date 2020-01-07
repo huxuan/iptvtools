@@ -8,7 +8,8 @@ Description: Defaults for iptvtools.
 """
 CONFIG = 'config.json'
 INPUT = 'https://iptv-org.github.io/iptv/index.m3u'
-MIN_HEIGHT = 1080
+INTERVAL = 1
+MIN_HEIGHT = 0
 OUTPUT = 'iptvtools.m3u'
 TIMEOUT = 10
 UDPXY = None

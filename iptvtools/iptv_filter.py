@@ -24,6 +24,8 @@ def parse_args():
                         help=helps.CONFIG)
     parser.add_argument('-i', '--input', action='append', default=[],
                         help=helps.INPUT)
+    parser.add_argument('-I', '--interval', default=defaults.INTERVAL,
+                        type=int, help=helps.INTERVAL)
     parser.add_argument('-o', '--output', default=defaults.OUTPUT,
                         help=helps.OUTPUT)
     parser.add_argument('-r', '--replace-group-by-source', action='store_true',
@@ -48,8 +50,9 @@ def main():
     playlist = Playlist()
     playlist.parse(args)
     playlist.filter(args)
-    print(f'{len(playlist.data)} channels after filtering!')
     open(args.output, 'w', encoding='utf-8').write(playlist.export(args))
+    print('Invalid Urls:')
+    print('\n'.join(sorted(playlist.invalid_urls)))
 
 
 if __name__ == '__main__':

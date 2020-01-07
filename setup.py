@@ -24,6 +24,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
+    'requests',
     'tqdm'
 ]
 

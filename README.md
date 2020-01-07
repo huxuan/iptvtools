@@ -2,14 +2,18 @@
 
 [![PyPI version](https://badge.fury.io/py/iptvtools.svg)](https://badge.fury.io/py/iptvtools)
 
-IPTVTools aims to provide the following features:
+Scripts currently provided:
 
-- [X] Grab well-maintained playlists from the Internet.
-- [X] Filter inaccessible channels.
-- [X] Filter channels according width/resolution.
-- [X] Simple strategy to unify channels' titles.
-- [X] Format url with UDP proxy (Udpxy) if provided.
-- [X] Fulfill channels' information by referring to well-maintained template.
+- [iptv-filter](https://github.com/huxuan/iptvtools/wiki/iptv%E2%80%90filter)
+  - Merge from different resources.
+  - Check the connectivity.
+  - Filter by custom criteria, e.g. resolution.
+  - Match with templates and EPG.
+  - Format the url with UDPxy if provided.
+  - Unify channels' titles.
+
+Features planned on the road:
+
 - [ ] Scan certain ip and port range to find new channels.
 - [ ] Establish a lightweight database for routine maintenance.
 
@@ -21,12 +25,6 @@ Last but not least, any ideas, comments and suggestions are welcome!
 
 ```shell
 pip install -U iptvtools
-```
-
-or
-
-```shell
-pip install .
 ```
 
 ## Usage

@@ -16,6 +16,10 @@ INPUT = (
     f'Input playlist file/url, defaults to `[{defaults.INPUT}]`. Note that '
     f'multiple input files/urls are supported.'
 )
+INTERVAL = (
+    f'Interval in seconds between fetching each url, defaults to '
+    f'{defaults.INTERVAL}.'
+)
 MIN_HEIGHT = (
     f'Minimal acceptable height/resolution, defaults to {defaults.MIN_HEIGHT}'
     f'which means {defaults.MIN_HEIGHT}P. Set 0 to disable the filtering.'

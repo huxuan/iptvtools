@@ -11,7 +11,7 @@ import os
 import os.path
 
 
-class Config():
+class MetaConfig(type):
     """Configuration for iptvtools."""
     config = {}
 
@@ -22,7 +22,10 @@ class Config():
             with open(config_file) as fin:
                 cls.config = json.load(fin)
 
-    @classmethod
     def __getattr__(cls, key):
         """Get configuration with key."""
         return cls.config.get(key, {})
+
+
+class Config(metaclass=MetaConfig):  # pylint: disable=R0903
+    """Configuration for iptvtools."""

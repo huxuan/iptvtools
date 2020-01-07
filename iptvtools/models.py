@@ -7,7 +7,9 @@ Email: i(at)huxuan.org
 Description: Playlist which contains all the channels' information.
 """
 import os.path
+import random
 import sys
+import time
 
 from tqdm import tqdm
 
@@ -21,6 +23,8 @@ class Playlist():
     def __init__(self):
         self.data = {}
         self.template = {}
+        self.valid_urls = set()
+        self.invalid_urls = set()
         self.tvg_url = None
 
     def export(self, args):
@@ -29,7 +33,7 @@ class Playlist():
         res.append(tags.M3U)
         if self.tvg_url is not None:
             res[0] += f' x-tvg-url="{self.tvg_url}"'
-        urls = sorted(self.data, key=self.__sort_by_tvg_id_and_title)
+        urls = sorted(self.valid_urls, key=self.__sort_by_tvg_id_and_title)
         for url in urls:
             internal_id = self.data[url]['id']
             if internal_id in self.template.keys():
@@ -76,6 +80,10 @@ class Playlist():
                     if is_template:
                         self.template[current_item['id']] = current_item
                     else:
+
+                        # Hack for some abnormal urls.
+                        line = line.replace('///', '//')
+
                         if udpxy:
                             line = utils.convert_url_with_udpxy(line, udpxy)
                         # Only inputs need source.
@@ -84,15 +92,22 @@ class Playlist():
 
     def filter(self, args):
         """Filter process."""
-        if args.min_height:
-            urls = list(self.data.keys())
-            for url in tqdm(urls, ascii=True):
-                stream_info = utils.probe(url, args.timeout)
-                if stream_info:
-                    if utils.max_height(stream_info) < args.min_height:
-                        self.data.pop(url)
-                else:
-                    self.data.pop(url)
+        urls = list(self.data.keys())
+        random.shuffle(urls)
+        pbar = tqdm(urls, ascii=True)
+        for url in pbar:
+            flag = True
+            if args.min_height > 0:
+                if not utils.check_stream(url, args):
+                    flag = False
+            elif not utils.check_connectivity(url, args.timeout):
+                flag = False
+            if flag:
+                self.valid_urls.add(url)
+                pbar.set_description(f'{len(self.valid_urls)} Valid Channels')
+            else:
+                self.invalid_urls.add(url)
+            time.sleep(args.interval)
 
     def __sort_by_tvg_id_and_title(self, url):
         """Sort by tvg-id and title."""
