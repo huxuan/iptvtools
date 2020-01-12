@@ -9,7 +9,7 @@ Description: Python packaging for iptvtools.
 from setuptools import find_packages
 from setuptools import setup
 
-import iptvtools
+from iptvtools import __version__
 
 DESCRIPTION = (
     'A set of scripts that help to better IPTV experience.'
@@ -46,7 +46,7 @@ def readme():
 
 
 setup(name='iptvtools',
-      version=iptvtools.__version__,
+      version=__version__,
       description=DESCRIPTION,
       long_description=readme(),
       long_description_content_type='text/markdown',
