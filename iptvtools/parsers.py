@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Simplified parser for m3u8 file.
+
 File: parser.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Simplified parser for m3u8 file.
 """
-from urllib.request import urlopen
 import os.path
+from urllib.request import urlopen
 
-from .constants import patterns
+from iptvtools.constants import patterns
 
 
 def parse_content_to_lines(content):

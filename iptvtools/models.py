@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Playlist which contains all the channels' information.
+
 File: models.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Playlist which contains all the channels' information.
 """
 import os.path
 import random
@@ -13,14 +14,16 @@ import time
 
 from tqdm import tqdm
 
-from . import parsers
-from . import utils
-from .constants import tags
+from iptvtools import parsers
+from iptvtools import utils
+from iptvtools.constants import tags
 
 
 class Playlist():
     """Playlist model."""
+
     def __init__(self):
+        """Init for Playlist."""
         self.data = {}
         self.template = {}
         self.valid_urls = set()
@@ -46,8 +49,7 @@ class Playlist():
             params = ' '.join([f'{key}="{value}"'
                                for key, value in params_dict.items()])
             res.append(
-                f'{tags.INF}:{entry["duration"]} {params},{entry["title"]}'
-            )
+                f'{tags.INF}:{entry["duration"]} {params},{entry["title"]}')
             res.append(url)
         return '\n'.join(res)
 
@@ -57,7 +59,7 @@ class Playlist():
         self._parse(args.template, is_template=True)
 
     def _parse(self, sources, udpxy=None, is_template=False):
-        """Internal implementation of parsing."""
+        """Parse playlist sources."""
         for source in sources:
             lines = parsers.parse_content_to_lines(source)
             source_name = os.path.splitext(os.path.basename(source))[0]

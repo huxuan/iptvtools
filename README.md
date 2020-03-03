@@ -8,7 +8,7 @@
 
 Scripts currently provided:
 
-- [iptv-filter](https://github.com/huxuan/iptvtools/wiki/iptv%E2%80%90filter)
+- [iptv-filter](https://iptvtools.readthedocs.io/en/latest/scripts/iptv-filter.html)
   - Merge from different resources.
   - Check the tcp/udp connectivity.
   - Filter by custom criteria, e.g. resolution.

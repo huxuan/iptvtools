@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Patterns for iptvtools.
+
 File: constants.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Patterns for iptvtools.
 """
 import re
 

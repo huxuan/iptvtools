@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Helps for iptvtools.
+
 File: constants.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Helps for iptvtools.
 """
-from . import defaults
+from iptvtools.constants import defaults
 
 CONFIG = (
     f'Configuration file to unify title and id information, defaults to '

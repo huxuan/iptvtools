@@ -1,22 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Relevant Utilities.
+
 File: utils.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Relevant Utilities.
 """
+import json
 import socket
 import struct
 from subprocess import PIPE
 from subprocess import Popen
 from subprocess import TimeoutExpired
 from urllib.parse import urlparse
-import json
 
 import requests
 
-from .config import Config
+from iptvtools.config import Config
 
 PROBE_COMMAND = (
     'ffprobe -hide_banner -show_streams -select_streams v '
@@ -25,7 +26,7 @@ PROBE_COMMAND = (
 
 UDP_SCHEME = (
     'udp',
-    'rtp'
+    'rtp',
 )
 
 

@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Python packaging for iptvtools.
+
 File: setup.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Python packaging for iptvtools.
 """
+from pkg_resources import DistributionNotFound
+from pkg_resources import get_distribution
 from setuptools import find_packages
 from setuptools import setup
 
-from iptvtools import __version__
+NAME = 'iptvtools'
+AUTHOR = 'huxuan'
+EMAIL = f'i+{NAME}@huxuan.org'
 
 DESCRIPTION = (
     'A set of scripts that help to better IPTV experience.'
@@ -20,49 +25,58 @@ CLASSIFIERS = [
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3 :: Only',
-    'Topic :: Utilities'
+    'Topic :: Utilities',
 ]
 
 INSTALL_REQUIRES = [
     'requests',
-    'tqdm'
+    'tqdm',
 ]
 
-DEV_REQUIRES = [
-    'pycodestyle',
-    'pyflakes',
-    'pylint'
+KEYWORDS = [
+    'iptv',
+    'm3u',
+    'playlist',
+    'tools',
+    'filter',
 ]
 
-EXTRAS_REQUIRE = {
-    'dev': DEV_REQUIRES
-}
+try:
+    VERSION = f'v{get_distribution(NAME).version}'
+except DistributionNotFound:
+    VERSION = 'master'
+
+PROJECT_URL = f'https://github.com/{AUTHOR}/{NAME}'
+BASE_URL = f'{PROJECT_URL}/blob/{VERSION}'
 
 
 def readme():
     """Parse README for long_description."""
-    with open('README.md') as fin:
-        return fin.read()
+    content = open('README.md').read()
+    content = content.replace('README.md', f'{BASE_URL}/README.md', 1)
+    content = content.replace('README-en.md', f'{BASE_URL}/README-en.md', 1)
+    content = content.replace('README-zh.md', f'{BASE_URL}/README-zh.md', 1)
+    return content
 
 
-setup(name='iptvtools',
-      version=__version__,
+setup(name=NAME,
       description=DESCRIPTION,
       long_description=readme(),
       long_description_content_type='text/markdown',
       classifiers=CLASSIFIERS,
-      keywords='iptv m3u playlist tools filter',
-      url='https://github.com/huxuan/iptvtools',
-      author='Xuan (Sean) Hu',
-      author_email='i@huxuan.org',
+      keywords=' '.join(KEYWORDS),
+      url=PROJECT_URL,
+      author=AUTHOR,
+      author_email=EMAIL,
       license='MIT',
-      packages=find_packages(),
+      packages=find_packages(exclude=['tests']),
+      use_scm_version=True,
+      setup_requires=['setuptools_scm'],
       install_requires=INSTALL_REQUIRES,
-      extras_require=EXTRAS_REQUIRE,
       python_requires='>=3',
       entry_points={
           'console_scripts': [
-              'iptv-filter=iptvtools.iptv_filter:main'
+              'iptv-filter=iptvtools.iptv_filter:main',
           ],
       },
       include_package_data=True)

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Configuration for iptvtools.
+
 File: config.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Configuration for iptvtools.
 """
 import json
 import os
@@ -13,6 +14,7 @@ import os.path
 
 class MetaConfig(type):
     """Configuration for iptvtools."""
+
     config = {}
 
     @classmethod

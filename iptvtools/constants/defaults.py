@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Defaults for iptvtools.
+
 File: constants.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Defaults for iptvtools.
 """
 CONFIG = 'config.json'
 INPUT = 'https://iptv-org.github.io/iptv/index.m3u'

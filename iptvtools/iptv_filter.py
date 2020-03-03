@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Filter IPTV m3u playlists according to customized criteria.
+
 File: main.py
 Author: huxuan
 Email: i(at)huxuan.org
-Description: Filter IPTV m3u playlists according to customized criteria.
 """
 import argparse
 
-from . import __version__
-from .config import Config
-from .constants import defaults
-from .constants import helps
-from .models import Playlist
+from iptvtools import __version__
+from iptvtools.config import Config
+from iptvtools.constants import defaults
+from iptvtools.constants import helps
+from iptvtools.models import Playlist
 
 
 def parse_args():
@@ -42,7 +43,7 @@ def parse_args():
 
 
 def main():
-    """Main process."""
+    """Filter m3u playlists."""
     args = parse_args()
     if not args.input:
         args.input = [defaults.INPUT]
