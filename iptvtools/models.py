@@ -120,7 +120,3 @@ class Playlist():
             tvg_id = int(self.template[internal_id]['params']['tvg-id'])
             title = self.template[internal_id]['title']
         return tvg_id, title
-
-    def __sort_by_data_title(self, url):
-        """Sort by title in data."""
-        return self.data[url]['title']
