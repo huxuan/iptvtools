@@ -90,9 +90,11 @@ def check_stream(url, args):
     """Check stream information."""
     stream_info = probe(url, args.timeout)
     if stream_info:
-        if max_height(stream_info) >= args.min_height:
-            return True
-    return False
+        height = max_height(stream_info)
+        if height >= args.min_height:
+            return True, height
+        return False, height
+    return False, 0
 
 
 def check_connectivity(url, timeout=None):
@@ -127,3 +129,16 @@ def check_http_connectivity(url, timeout=None):
         return requests.get(url, timeout=timeout, stream=True).ok
     except requests.RequestException:
         return False
+
+
+def height_to_resolution(height):
+    """Convert height to resolution."""
+    if height >= 4320:
+        return '8K'
+    if height >= 2160:
+        return '4K'
+    if height >= 1080:
+        return '1080p'
+    if height >= 720:
+        return '720p'
+    return f'{height}p'

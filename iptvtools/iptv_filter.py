@@ -18,12 +18,13 @@ from iptvtools.models import Playlist
 
 def parse_args():
     """Arguments Parsers."""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--min-height', default=defaults.MIN_HEIGHT, type=int,
                         help=helps.MIN_HEIGHT)
     parser.add_argument('-c', '--config', default=defaults.CONFIG,
                         help=helps.CONFIG)
-    parser.add_argument('-i', '--input', action='append', default=[],
+    parser.add_argument('-i', '--input', nargs='*', default=defaults.INPUT,
                         help=helps.INPUT)
     parser.add_argument('-I', '--interval', default=defaults.INTERVAL,
                         type=int, help=helps.INTERVAL)
@@ -31,7 +32,9 @@ def parse_args():
                         help=helps.OUTPUT)
     parser.add_argument('-r', '--replace-group-by-source', action='store_true',
                         help=helps.REPLACE_GROUP_BY_SOURCE)
-    parser.add_argument('-t', '--template', action='append', default=[],
+    parser.add_argument('-R', '--resolution-on-title', action='store_true',
+                        help=helps.RESOLUTION_ON_TITLE)
+    parser.add_argument('-t', '--template', nargs='*', default=[],
                         help=helps.TEMPLATE)
     parser.add_argument('-T', '--timeout', default=defaults.TIMEOUT, type=int,
                         help=helps.TIMEOUT)
@@ -45,8 +48,6 @@ def parse_args():
 def main():
     """Filter m3u playlists."""
     args = parse_args()
-    if not args.input:
-        args.input = [defaults.INPUT]
     Config.init(args.config)
     playlist = Playlist()
     playlist.parse(args)

@@ -48,8 +48,13 @@ class Playlist():
                 params_dict['group-title'] = self.data[url]['source']
             params = ' '.join([f'{key}="{value}"'
                                for key, value in params_dict.items()])
+            duration = entry['duration']
+            title = entry['title']
+            if args.resolution_on_title:
+                height = self.data[url]['height']
+                title += f' [{utils.height_to_resolution(height)}]'
             res.append(
-                f'{tags.INF}:{entry["duration"]} {params},{entry["title"]}')
+                f'{tags.INF}:{duration} {params},{title}')
             res.append(url)
         return '\n'.join(res)
 
@@ -99,9 +104,9 @@ class Playlist():
         pbar = tqdm(urls, ascii=True)
         for url in pbar:
             flag = True
-            if args.min_height > 0:
-                if not utils.check_stream(url, args):
-                    flag = False
+            if args.min_height or args.resolution_on_title:
+                flag, height = utils.check_stream(url, args)
+                self.data[url]['height'] = height
             elif not utils.check_connectivity(url, args.timeout):
                 flag = False
             if flag:

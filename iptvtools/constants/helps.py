@@ -7,40 +7,33 @@ File: constants.py
 Author: huxuan
 Email: i(at)huxuan.org
 """
-from iptvtools.constants import defaults
-
 CONFIG = (
-    f'Configuration file to unify title and id information, defaults to '
-    f'`{defaults.CONFIG}`'
+    f'Configuration file to unify title and id.'
 )
 INPUT = (
-    f'Input playlist file/url, defaults to `[{defaults.INPUT}]`. Note that '
-    f'multiple input files/urls are supported.'
+    f'One or more input m3u playlist files/urls.'
 )
 INTERVAL = (
-    f'Interval in seconds between fetching each url, defaults to '
-    f'{defaults.INTERVAL}.'
+    f'Interval in seconds between successive fetching requests.'
 )
 MIN_HEIGHT = (
-    f'Minimal acceptable height/resolution, defaults to {defaults.MIN_HEIGHT}'
-    f'which means {defaults.MIN_HEIGHT}P. Set 0 to disable the filtering.'
+    f'Minimum height/resolution to accept, 0 means no resolution filtering.'
 )
-OUTPUT = f'Output playlist file name, defaults to `{defaults.OUTPUT}`.'
+OUTPUT = f'Output file name.'
 REPLACE_GROUP_BY_SOURCE = (
-    f'Flag to indicate whether to replace the group title with source name, '
-    f'where source name is the basename of input files/urls without extension.'
+    f'Flag to replace the group title with the source name, where the source '
+    f'name is the basename of input files/urls without extension.'
+)
+RESOLUTION_ON_TITLE = (
+    f'Flag to append resolution such as 8K, 4K, 1080p, 720p to the title.'
 )
 TEMPLATE = (
-    f'Template playlist file/url which have well-maintained channel '
-    f'information to cooperate with EPG and will replace the corresponding '
-    f'entry (except url) if matched , defaults to `[]`. Note that multiple '
-    f'template files/urls are supported.'
+    f'Template m3u files/urls with well-maintained channel information to '
+    f'replace the matched entries.'
 )
 TIMEOUT = (
-    f'Acceptable timeout when retrieving stream information, defaults to '
-    f'{defaults.TIMEOUT}.'
+    f'Timeout threshold for fetching request.'
 )
 UDPXY = (
-    f'UDP Proxy which will convert the url automatically, defaults to '
-    f'`{defaults.UDPXY}`.'
+    f'UDP Proxy for certain IPTV channels.'
 )
