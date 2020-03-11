@@ -8,8 +8,10 @@ Author: huxuan
 Email: i(at)huxuan.org
 """
 import argparse
+import shutil
 
 from iptvtools import __version__
+from iptvtools import exceptions
 from iptvtools.config import Config
 from iptvtools.constants import defaults
 from iptvtools.constants import helps
@@ -48,6 +50,11 @@ def parse_args():
 def main():
     """Filter m3u playlists."""
     args = parse_args()
+
+    if args.min_height or args.resolution_on_title:
+        if shutil.which('ffprobe') is None:
+            raise exceptions.FFmpegNotInstalledError()
+
     Config.init(args.config)
     playlist = Playlist()
     playlist.parse(args)
