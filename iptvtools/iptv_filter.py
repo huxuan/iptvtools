@@ -26,8 +26,8 @@ def parse_args():
                         help=helps.MIN_HEIGHT)
     parser.add_argument('-c', '--config', default=defaults.CONFIG,
                         help=helps.CONFIG)
-    parser.add_argument('-i', '--input', nargs='*', default=defaults.INPUT,
-                        help=helps.INPUT)
+    parser.add_argument('-i', '--inputs', nargs='*', default=defaults.INPUTS,
+                        help=helps.INPUTS)
     parser.add_argument('-I', '--interval', default=defaults.INTERVAL,
                         type=int, help=helps.INTERVAL)
     parser.add_argument('-o', '--output', default=defaults.OUTPUT,
@@ -36,8 +36,10 @@ def parse_args():
                         help=helps.REPLACE_GROUP_BY_SOURCE)
     parser.add_argument('-R', '--resolution-on-title', action='store_true',
                         help=helps.RESOLUTION_ON_TITLE)
-    parser.add_argument('-t', '--template', nargs='*', default=[],
-                        help=helps.TEMPLATE)
+    parser.add_argument('-s', '--sort-keys', nargs='*',
+                        default=defaults.SORT_KEYS, help=helps.SORT_KEYS)
+    parser.add_argument('-t', '--templates', nargs='*',
+                        default=defaults.TEMPLATES, help=helps.TEMPLATES)
     parser.add_argument('-T', '--timeout', default=defaults.TIMEOUT, type=int,
                         help=helps.TIMEOUT)
     parser.add_argument('-u', '--udpxy', default=defaults.UDPXY,
@@ -56,12 +58,16 @@ def main():
             raise exceptions.FFmpegNotInstalledError()
 
     Config.init(args.config)
-    playlist = Playlist()
-    playlist.parse(args)
-    playlist.filter(args)
-    open(args.output, 'w', encoding='utf-8').write(playlist.export(args))
-    print('Invalid Urls:')
-    print('\n'.join(sorted(playlist.invalid_urls)))
+    playlist = Playlist(args)
+    playlist.parse()
+    playlist.filter()
+    playlist.export()
+    if playlist.inaccessible_urls:
+        print('Inaccessible Urls:')
+        print('\n'.join(sorted(playlist.inaccessible_urls)))
+    if playlist.poor_urls:
+        print('Poor resolution Urls:')
+        print('\n'.join(sorted(playlist.poor_urls)))
 
 
 if __name__ == '__main__':

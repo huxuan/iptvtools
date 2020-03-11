@@ -22,46 +22,43 @@ from iptvtools.constants import tags
 class Playlist():
     """Playlist model."""
 
-    def __init__(self):
+    def __init__(self, args):
         """Init for Playlist."""
+        self.args = args
         self.data = {}
-        self.template = {}
-        self.valid_urls = set()
-        self.invalid_urls = set()
+        self.inaccessible_urls = set()
+        self.poor_urls = set()
         self.tvg_url = None
+        self.valid_ids = set()
 
-    def export(self, args):
+    def export(self):
         """Export playlist information."""
         res = []
         res.append(tags.M3U)
         if self.tvg_url is not None:
             res[0] += f' x-tvg-url="{self.tvg_url}"'
-        urls = sorted(self.valid_urls, key=self.__custom_sort)
-        for url in urls:
-            internal_id = self.data[url]['id']
-            if internal_id in self.template.keys():
-                entry = self.template[internal_id]
-            else:
-                entry = self.data[url]
+        internal_ids = sorted(self.valid_ids, key=self.__custom_sort)
+        for internal_id in internal_ids:
+            entry = self.data[internal_id]
             params_dict = entry.get('params', {})
-            if args.replace_group_by_source:
-                params_dict['group-title'] = self.data[url]['source']
+            if self.args.replace_group_by_source:
+                params_dict['group-title'] = self.data[internal_id]['source']
             params = ' '.join([f'{key}="{value}"'
                                for key, value in params_dict.items()])
             duration = entry['duration']
             title = entry['title']
-            if args.resolution_on_title:
-                height = self.data[url]['height']
+            if self.args.resolution_on_title:
+                height = self.data[internal_id]['height']
                 title += f' [{utils.height_to_resolution(height)}]'
             res.append(
                 f'{tags.INF}:{duration} {params},{title}')
-            res.append(url)
-        return '\n'.join(res)
+            res.append(self.data[internal_id]['url'])
+        open(self.args.output, 'w', encoding='utf-8').write('\n'.join(res))
 
-    def parse(self, args):
+    def parse(self):
         """Parse contents."""
-        self._parse(args.input, udpxy=args.udpxy)
-        self._parse(args.template, is_template=True)
+        self._parse(self.args.inputs, udpxy=self.args.udpxy)
+        self._parse(self.args.templates, is_template=True)
 
     def _parse(self, sources, udpxy=None, is_template=False):
         """Parse playlist sources."""
@@ -83,45 +80,50 @@ class Playlist():
                 if line.startswith(tags.INF):
                     current_item = parsers.parse_tag_inf(line)
                     current_item = utils.unify_title_and_id(current_item)
+                    current_id = current_item['id']
                 else:
                     if is_template:
-                        self.template[current_item['id']] = current_item
+                        if current_id not in self.data:
+                            continue
+                        current_params = current_item['params']
+                        self.data[current_id]['params'].update(current_params)
+                        self.data[current_id]['title'] = current_item['title']
                     else:
-
-                        # Hack for some abnormal urls.
-                        line = line.replace('///', '//')
-
                         if udpxy:
                             line = utils.convert_url_with_udpxy(line, udpxy)
-                        # Only inputs need source.
                         current_item['source'] = source_name
-                        self.data[line] = current_item
+                        current_item['url'] = line
+                        self.data[current_id] = current_item
 
-    def filter(self, args):
+    def filter(self):
         """Filter process."""
-        urls = list(self.data.keys())
-        random.shuffle(urls)
-        pbar = tqdm(urls, ascii=True)
-        for url in pbar:
-            flag = True
-            if args.min_height or args.resolution_on_title:
-                flag, height = utils.check_stream(url, args)
-                self.data[url]['height'] = height
-            elif not utils.check_connectivity(url, args.timeout):
-                flag = False
-            if flag:
-                self.valid_urls.add(url)
-                pbar.set_description(f'{len(self.valid_urls)} Valid Channels')
-            else:
-                self.invalid_urls.add(url)
-            time.sleep(args.interval)
+        internal_ids = list(self.data.keys())
+        random.shuffle(internal_ids)
+        pbar = tqdm(internal_ids, ascii=True)
+        for internal_id in pbar:
+            pbar.set_description(f'{len(self.valid_ids)} Valid Channels')
+            time.sleep(self.args.interval)
+            url = self.data[internal_id]['url']
+            if self.args.min_height or self.args.resolution_on_title:
+                height = utils.check_stream(url, self.args.timeout)
+                self.data[internal_id]['height'] = height
+                if height == 0:
+                    self.inaccessible_urls.add(url)
+                elif height < self.args.min_height:
+                    self.poor_urls.add(url)
+                self.valid_ids.add(internal_id)
+            elif not utils.check_connectivity(url, self.args.timeout):
+                self.inaccessible_urls.add(url)
 
-    def __custom_sort(self, url):
+    def __custom_sort(self, internal_id):
         """Sort by tvg-id, resolution and title."""
-        internal_id = self.data[url]['id']
-        tvg_id = sys.maxsize
-        title = self.data[url]['title']
-        if internal_id in self.template.keys():
-            tvg_id = int(self.template[internal_id]['params']['tvg-id'])
-            title = self.template[internal_id]['title']
-        return tvg_id, self.data[url].get('height', 0), title
+        res = []
+        for key in self.args.sort_keys:
+            entry = self.data[internal_id]
+            if key == 'height':
+                res.append(-entry.get(key, 0))
+            elif key == 'title':
+                res.append(entry.get(key, ''))
+            elif key == 'tvg-id':
+                res.append(entry['params'].get(key, str(sys.maxsize)))
+        return res

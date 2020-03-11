@@ -10,7 +10,7 @@ Email: i(at)huxuan.org
 CONFIG = (
     f'Configuration file to unify title and id.'
 )
-INPUT = (
+INPUTS = (
     f'One or more input m3u playlist files/urls.'
 )
 INTERVAL = (
@@ -27,7 +27,11 @@ REPLACE_GROUP_BY_SOURCE = (
 RESOLUTION_ON_TITLE = (
     f'Flag to append resolution such as 8K, 4K, 1080p, 720p to the title.'
 )
-TEMPLATE = (
+SORT_KEYS = (
+    f'List of keys to sort the channels. Valid options currently supported '
+    f'are `tvg-id`, `height` and `title`.'
+)
+TEMPLATES = (
     f'Template m3u files/urls with well-maintained channel information to '
     f'replace the matched entries.'
 )

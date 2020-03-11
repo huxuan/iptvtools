@@ -60,16 +60,6 @@ def unify_title_and_id(item):
     return item
 
 
-def max_height(stream_info):
-    """Get max height from stream information."""
-    if stream_info.get('streams'):
-        return max([
-            stream.get('height', 0)
-            for stream in stream_info['streams']
-        ])
-    return 0
-
-
 def probe(url, timeout=None):
     """Invoke probe to get stream information."""
     outs = None
@@ -86,15 +76,15 @@ def probe(url, timeout=None):
     return None
 
 
-def check_stream(url, args):
-    """Check stream information."""
-    stream_info = probe(url, args.timeout)
-    if stream_info:
-        height = max_height(stream_info)
-        if height >= args.min_height:
-            return True, height
-        return False, height
-    return False, 0
+def check_stream(url, timeout=None):
+    """Check stream information and return height."""
+    stream_info = probe(url, timeout)
+    if stream_info.get('streams'):
+        return max([
+            stream.get('height', 0)
+            for stream in stream_info['streams']
+        ])
+    return 0
 
 
 def check_connectivity(url, timeout=None):
