@@ -36,7 +36,7 @@ class Playlist():
         res.append(tags.M3U)
         if self.tvg_url is not None:
             res[0] += f' x-tvg-url="{self.tvg_url}"'
-        urls = sorted(self.valid_urls, key=self.__sort_by_tvg_id_and_title)
+        urls = sorted(self.valid_urls, key=self.__custom_sort)
         for url in urls:
             internal_id = self.data[url]['id']
             if internal_id in self.template.keys():
@@ -116,12 +116,12 @@ class Playlist():
                 self.invalid_urls.add(url)
             time.sleep(args.interval)
 
-    def __sort_by_tvg_id_and_title(self, url):
-        """Sort by tvg-id and title."""
+    def __custom_sort(self, url):
+        """Sort by tvg-id, resolution and title."""
         internal_id = self.data[url]['id']
         tvg_id = sys.maxsize
         title = self.data[url]['title']
         if internal_id in self.template.keys():
             tvg_id = int(self.template[internal_id]['params']['tvg-id'])
             title = self.template[internal_id]['title']
-        return tvg_id, title
+        return tvg_id, self.data[url].get('height', 0), title
