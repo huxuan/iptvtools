@@ -44,7 +44,7 @@ SORT_KEYS
 
 List of keys to sort the channels. Valid options currently supported are
 `tvg-id`, `height` and `title`. By default, it will work the same as
-`-S tvg-id resolution title`, and you can change the order as you want.
+`-s tvg-id resolution title`, and you can change the order as you want.
 If you want to have more keys to be supported, just let me know.
 
 TEMPLATES

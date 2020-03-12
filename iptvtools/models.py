@@ -26,6 +26,7 @@ class Playlist():
         """Init for Playlist."""
         self.args = args
         self.data = {}
+        self.id_url = {}
         self.inaccessible_urls = set()
         self.poor_urls = set()
         self.tvg_url = None
@@ -36,22 +37,23 @@ class Playlist():
         res.append(tags.M3U)
         if self.tvg_url is not None:
             res[0] += f' x-tvg-url="{self.tvg_url}"'
-        for internal_id in self.data:
+        for url in sorted(self.data, key=self.__custom_sort):
 
-            url = self.data[internal_id]['url']
             if url in self.inaccessible_urls or url in self.poor_urls:
                 continue
 
-            entry = self.data[internal_id]
+            entry = self.data[url]
             params_dict = entry.get('params', {})
             if self.args.replace_group_by_source:
-                params_dict['group-title'] = self.data[internal_id]['source']
-            params = ' '.join([f'{key}="{value}"'
-                               for key, value in params_dict.items()])
+                params_dict['group-title'] = self.data[url]['source']
+            params = ' '.join([
+                f'{key}="{value}"'
+                for key, value in params_dict.items()
+            ])
             duration = entry['duration']
             title = entry['title']
             if self.args.resolution_on_title:
-                height = self.data[internal_id]['height']
+                height = self.data[url]['height']
                 title += f' [{utils.height_to_resolution(height)}]'
 
             res.append(
@@ -87,26 +89,27 @@ class Playlist():
                     current_id = current_item['id']
                 else:
                     if is_template:
-                        if current_id not in self.data:
-                            continue
-                        current_params = current_item['params']
-                        self.data[current_id]['params'].update(current_params)
-                        self.data[current_id]['title'] = current_item['title']
+                        for url in self.id_url.get(current_id, []):
+                            current_params = current_item['params']
+                            self.data[url]['params'].update(current_params)
+                            self.data[url]['title'] = current_item['title']
                     else:
                         if udpxy:
                             line = utils.convert_url_with_udpxy(line, udpxy)
                         current_item['source'] = source_name
-                        current_item['url'] = line
-                        self.data[current_id] = current_item
+                        self.data[line] = current_item
+
+                        if current_id not in self.id_url:
+                            self.id_url[current_id] = []
+                        self.id_url[current_id].append(line)
 
     def filter(self):
         """Filter process."""
-        internal_ids = list(self.data.keys())
-        random.shuffle(internal_ids)
-        pbar = tqdm(internal_ids, ascii=True)
-        for internal_id in pbar:
+        urls = list(self.data.keys())
+        random.shuffle(urls)
+        pbar = tqdm(urls, ascii=True)
+        for url in pbar:
             time.sleep(self.args.interval)
-            url = self.data[internal_id]['url']
             status = 'OK'
             if self.args.min_height or self.args.resolution_on_title:
                 height = utils.check_stream(url, self.args.timeout)
@@ -116,17 +119,17 @@ class Playlist():
                 elif height < self.args.min_height:
                     self.poor_urls.add(url)
                     status = 'Poor Resolution'
-                self.data[internal_id]['height'] = height
+                self.data[url]['height'] = height
             elif not utils.check_connectivity(url, self.args.timeout):
                 self.inaccessible_urls.add(url)
                 status = 'Inaccessible'
             pbar.write(f'{url}, {status}!')
 
-    def __custom_sort(self, internal_id):
+    def __custom_sort(self, url):
         """Sort by tvg-id, resolution and title."""
         res = []
         for key in self.args.sort_keys:
-            entry = self.data[internal_id]
+            entry = self.data[url]
             if key == 'height':
                 res.append(-entry.get(key, 0))
             elif key == 'title':
