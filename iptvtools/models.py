@@ -29,7 +29,6 @@ class Playlist():
         self.inaccessible_urls = set()
         self.poor_urls = set()
         self.tvg_url = None
-        self.valid_ids = set()
 
     def export(self):
         """Export playlist information."""
@@ -37,8 +36,12 @@ class Playlist():
         res.append(tags.M3U)
         if self.tvg_url is not None:
             res[0] += f' x-tvg-url="{self.tvg_url}"'
-        internal_ids = sorted(self.valid_ids, key=self.__custom_sort)
-        for internal_id in internal_ids:
+        for internal_id in self.data:
+
+            url = self.data[internal_id]['url']
+            if url in self.inaccessible_urls or url in self.poor_urls:
+                continue
+
             entry = self.data[internal_id]
             params_dict = entry.get('params', {})
             if self.args.replace_group_by_source:
@@ -50,9 +53,10 @@ class Playlist():
             if self.args.resolution_on_title:
                 height = self.data[internal_id]['height']
                 title += f' [{utils.height_to_resolution(height)}]'
+
             res.append(
-                f'{tags.INF}:{duration} {params},{title}')
-            res.append(self.data[internal_id]['url'])
+                f'{tags.INF}:{duration} {params},{title}\n{url}')
+
         open(self.args.output, 'w', encoding='utf-8').write('\n'.join(res))
 
     def parse(self):
@@ -101,19 +105,22 @@ class Playlist():
         random.shuffle(internal_ids)
         pbar = tqdm(internal_ids, ascii=True)
         for internal_id in pbar:
-            pbar.set_description(f'{len(self.valid_ids)} Valid Channels')
             time.sleep(self.args.interval)
             url = self.data[internal_id]['url']
+            status = 'OK'
             if self.args.min_height or self.args.resolution_on_title:
                 height = utils.check_stream(url, self.args.timeout)
-                self.data[internal_id]['height'] = height
                 if height == 0:
                     self.inaccessible_urls.add(url)
+                    status = 'Inaccessible'
                 elif height < self.args.min_height:
                     self.poor_urls.add(url)
-                self.valid_ids.add(internal_id)
+                    status = 'Poor Resolution'
+                self.data[internal_id]['height'] = height
             elif not utils.check_connectivity(url, self.args.timeout):
                 self.inaccessible_urls.add(url)
+                status = 'Inaccessible'
+            pbar.write(f'{url}, {status}!')
 
     def __custom_sort(self, internal_id):
         """Sort by tvg-id, resolution and title."""
@@ -125,5 +132,5 @@ class Playlist():
             elif key == 'title':
                 res.append(entry.get(key, ''))
             elif key == 'tvg-id':
-                res.append(entry['params'].get(key, str(sys.maxsize)))
+                res.append(int(entry['params'].get(key) or sys.maxsize))
         return res

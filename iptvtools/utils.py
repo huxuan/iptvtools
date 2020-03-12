@@ -79,7 +79,7 @@ def probe(url, timeout=None):
 def check_stream(url, timeout=None):
     """Check stream information and return height."""
     stream_info = probe(url, timeout)
-    if stream_info.get('streams'):
+    if stream_info and stream_info.get('streams'):
         return max([
             stream.get('height', 0)
             for stream in stream_info['streams']
