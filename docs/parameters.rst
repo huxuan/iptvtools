@@ -23,7 +23,7 @@ A general idea is to make the ``id`` as simple as possible
 so they will have a high possibility to match,
 though there might be some false positive cases.
 So, ``id_unifiers`` can be treated as
-a further simplification of ``titile_unifier``.
+a further simplification of ``title_unifier``.
 
 For example, entry ``"-": ""`` will convert ``CCTV-1`` to ``CCTV1``,
 entry ``"＋": "+"`` will convert ``CCTV-5＋`` to ``CCTV-5+``.
@@ -39,8 +39,16 @@ For example, entry ``"CCTV-1": "中央1套"`` will convert ``CCTV-11`` to ``中�
 So, in generally,
 only keep those necessary entries and keep it as simple as possible.
 
-TEMPLATE
---------
+SORT_KEYS
+---------
+
+List of keys to sort the channels. Valid options currently supported are
+`tvg-id`, `height` and `title`. By default, it will work the same as
+`-s tvg-id resolution title`, and you can change the order as you want.
+If you want to have more keys to be supported, just let me know.
+
+TEMPLATES
+---------
 
 A m3u playlist with well-maintained information to cooperate with EPG.
 Please refer to `Well‐maintained templates & EPGs <https://github.com/huxuan/iptvtools/wiki/Well%E2%80%90maintained-templates-&-EPGs>`_.
@@ -51,7 +59,7 @@ TIMEOUT
 -------
 
 TIMEOUT is used to check the connectivity.
-Direct check which only fecth the response header tends to be fast.
+Direct check which only fetch the response header tends to be fast.
 But it usually takes seconds to probe stream information
 depends on your network (bandwidth and latency).
 For me, it is about 3 to 5 seconds.
@@ -59,7 +67,7 @@ For me, it is about 3 to 5 seconds.
 UDPXY
 -----
 
-If the IPTV streams is forwarded by UPDXY,
+If the IPTV streams is forwarded by UDPXY,
 setting it will convert all the urls automatically.
 For examples, with UDPXY ``http://192.168.0.1:8888/``,
 ``rtp://123.45.67.89:1234`` will be converted to
