@@ -123,6 +123,8 @@ def check_http_connectivity(url, timeout=None):
 
 def height_to_resolution(height):
     """Convert height to resolution."""
+    if not height:
+        return ''
     if height >= 4320:
         return '8K'
     if height >= 2160:
