@@ -53,7 +53,7 @@ class Playlist():
             duration = entry['duration']
             title = entry['title']
             if self.args.resolution_on_title:
-                height = self.data[url]['height']
+                height = self.data[url].get('height')
                 title += f' [{utils.height_to_resolution(height)}]'
 
             res.append(
