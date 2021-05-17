@@ -15,7 +15,7 @@ sphinx-rtd-theme = "*"
 sphinxcontrib-programoutput = "*"
 
 [packages]
-iptvtools = {editable = true,path = "."}
+iptvtools = {editable = true, path = "."}
 
 [requires]
 python_version = "3"
