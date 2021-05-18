@@ -12,6 +12,7 @@ from pkg_resources import get_distribution
 from setuptools import find_packages
 from setuptools import setup
 
+
 NAME = 'iptvtools'
 AUTHOR = 'huxuan'
 EMAIL = f'i+{NAME}@huxuan.org'
