@@ -3,6 +3,30 @@ Selected Parameters
 
 Here is some further explanation for those not so obvious parameters.
 
+GROUP_EXCLUDE
+-------------
+
+Filter the playlist depends on the group title with a blacklist (regular expression).
+Note that, it has higher priority than the whitelist ``GROUP_INCLUDE``.
+
+GROUP_INCLUDE
+-------------
+
+Filter the playlist depends on the group title with a whitelist (regular expression).
+Note that, if set, only groups match the pattern will be included.
+
+CHANNEL_EXCLUDE
+---------------
+
+Filter the playlist depends on the channel title by a blacklist (regular expression).
+Note that, it has higher priority than the whitelist ``CHANNEL_INCLUDE``.
+
+CHANNEL_INCLUDE
+---------------
+
+Filter the playlist depends on the channel title by a whitelist (regular expression).
+Note that, if set, only channels match the pattern will be included.
+
 MIN_HEIGHT
 ----------
 

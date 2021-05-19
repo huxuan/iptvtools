@@ -7,8 +7,10 @@ File: models.py
 Author: huxuan
 Email: i(at)huxuan.org
 """
+import logging
 import os.path
 import random
+import re
 import sys
 import time
 
@@ -63,10 +65,12 @@ class Playlist():
 
     def parse(self):
         """Parse contents."""
-        self._parse(self.args.inputs, udpxy=self.args.udpxy)
+        self._parse(self.args.inputs)
+        logging.debug(self.data)
         self._parse(self.args.templates, is_template=True)
+        logging.debug(self.data)
 
-    def _parse(self, sources, udpxy=None, is_template=False):
+    def _parse(self, sources, is_template=False):
         """Parse playlist sources."""
         for source in sources:
             lines = parsers.parse_content_to_lines(source)
@@ -79,14 +83,44 @@ class Playlist():
                 lines = lines[1:]
 
             current_item = {}
+            skip = False
             for line in lines:
                 line = line.strip()
                 if not line:
+                    continue
+                if skip:
+                    skip = False
                     continue
                 if line.startswith(tags.INF):
                     current_item = parsers.parse_tag_inf(line)
                     current_item = utils.unify_title_and_id(current_item)
                     current_id = current_item['id']
+
+                    if not skip and current_item.get('params') and \
+                            current_item['params'].get('group-title'):
+                        group = current_item['params']['group-title']
+                        if not skip and self.args.group_include:
+                            if re.search(self.args.group_include, group):
+                                logging.debug(f'Group to include: `{group}`.')
+                            else:
+                                skip = True
+                        if not skip and self.args.group_exclude and \
+                                re.search(self.args.group_exclude, group):
+                            skip = True
+                            logging.debug(f'Group to exclude: `{group}`.')
+
+                    if not skip and current_item.get('title'):
+                        title = current_item['title']
+                        if not skip and self.args.channel_include:
+                            if re.search(self.args.channel_include, title):
+                                logging.debug(f'Channel to include: `{title}`.')
+                            else:
+                                skip = True
+                        if not skip and self.args.channel_exclude and \
+                                re.search(self.args.channel_exclude, title):
+                            skip = True
+                            logging.debug(f'Channel to exclude: `{title}`.')
+
                 else:
                     if is_template:
                         for url in self.id_url.get(current_id, []):
@@ -94,8 +128,9 @@ class Playlist():
                             self.data[url]['params'].update(current_params)
                             self.data[url]['title'] = current_item['title']
                     else:
-                        if udpxy:
-                            line = utils.convert_url_with_udpxy(line, udpxy)
+                        if self.args.udpxy:
+                            line = utils.convert_url_with_udpxy(
+                                line, self.args.udpxy)
                         current_item['source'] = source_name
                         self.data[line] = current_item
 
