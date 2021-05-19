@@ -8,16 +8,18 @@ Author: huxuan
 Email: i(at)huxuan.org
 """
 import json
+import logging
 import socket
 import struct
-from subprocess import PIPE
-from subprocess import Popen
-from subprocess import TimeoutExpired
+from subprocess import PIPE  # noqa: S404
+from subprocess import Popen  # noqa: S404
+from subprocess import TimeoutExpired  # noqa: S404
 from urllib.parse import urlparse
 
 import requests
 
 from iptvtools.config import Config
+
 
 PROBE_COMMAND = (
     'ffprobe -hide_banner -show_streams -select_streams v '
@@ -63,16 +65,18 @@ def unify_title_and_id(item):
 def probe(url, timeout=None):
     """Invoke probe to get stream information."""
     outs = None
-    proc = Popen(f'{PROBE_COMMAND} {url}'.split(), stdout=PIPE, stderr=PIPE)
-    try:
-        outs, dummy = proc.communicate(timeout=timeout)
-    except TimeoutExpired:
-        proc.kill()
+    with Popen(  # noqa: S603
+            f'{PROBE_COMMAND} {url}'.split(),
+            stdout=PIPE, stderr=PIPE) as proc:
+        try:
+            outs, _ = proc.communicate(timeout=timeout)
+        except TimeoutExpired:
+            proc.kill()
     if outs:
         try:
             return json.loads(outs.decode('utf-8'))
         except json.JSONDecodeError as exc:
-            print(exc)
+            logging.error(exc)
     return None
 
 
@@ -103,7 +107,7 @@ def check_udp_connectivity(url, timeout=None):
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     sock.bind(('', int(port)))
-    mreq = struct.pack("4sl", socket.inet_aton(ipaddr), socket.INADDR_ANY)
+    mreq = struct.pack('4sl', socket.inet_aton(ipaddr), socket.INADDR_ANY)
     sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
     try:
         if sock.recv(10240):

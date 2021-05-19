@@ -8,6 +8,7 @@ Author: huxuan
 Email: i(at)huxuan.org
 """
 import argparse
+import logging
 import shutil
 
 from iptvtools import __version__
@@ -53,6 +54,8 @@ def main():
     """Filter m3u playlists."""
     args = parse_args()
 
+    logging.basicConfig(level=logging.INFO)
+
     if args.min_height or args.resolution_on_title:
         if shutil.which('ffprobe') is None:
             raise exceptions.FFmpegNotInstalledError()
@@ -63,11 +66,11 @@ def main():
     playlist.filter()
     playlist.export()
     if playlist.inaccessible_urls:
-        print('Inaccessible Urls:')
-        print('\n'.join(sorted(playlist.inaccessible_urls)))
+        logging.info('Inaccessible Urls:')
+        logging.info('\n'.join(sorted(playlist.inaccessible_urls)))
     if playlist.poor_urls:
-        print('Poor resolution Urls:')
-        print('\n'.join(sorted(playlist.poor_urls)))
+        logging.info('Poor resolution Urls:')
+        logging.info('\n'.join(sorted(playlist.poor_urls)))
 
 
 if __name__ == '__main__':

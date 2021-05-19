@@ -4,18 +4,27 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "*"
 flake8 = "*"
+flake8-bandit = "*"
 flake8-commas = "*"
+flake8-comprehensions = "*"
 flake8-docstrings = "*"
-flake8-import-order = "*"
+flake8-isort = "*"
+flake8-print = "*"
+flake8-quotes = "*"
+flake8-use-fstring = "*"
 pep8-naming = "*"
+pip-check-reqs = "*"
+pre-commit = "*"
 pylint = "*"
-sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinxcontrib-programoutput = "*"
+Sphinx = "*"
+flake8-noqa = "*"
 
 [packages]
-iptvtools = {editable = true,path = "."}
+iptvtools = {editable = true, path = "."}
 
 [requires]
 python_version = "3"

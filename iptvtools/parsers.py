@@ -7,6 +7,7 @@ File: parser.py
 Author: huxuan
 Email: i(at)huxuan.org
 """
+import logging
 import os.path
 from urllib.request import urlopen
 
@@ -37,13 +38,13 @@ def parse_tag_m3u(line):
 
 def _parse_from_file(filename):
     """Parse content from file."""
-    print(f'Retrieving playlists from file: {filename}')
+    logging.info(f'Retrieving playlists from file: {filename}')
     with open(filename, encoding='utf-8') as fin:
         return fin.read().splitlines()
 
 
 def _parse_from_url(url):
     """Parse content from url."""
-    print(f'Retrieving playlists from url: {url}')
-    with urlopen(url) as response:
+    logging.info(f'Retrieving playlists from url: {url}')
+    with urlopen(url) as response:  # noqa: S310
         return response.read().decode('utf-8').splitlines()

@@ -27,15 +27,12 @@ dev:
 		pipenv install --skip-lock --dev || true
 
 flake8:
-	${PIPRUN} flake8 \
-		--import-order-style google \
-		--application-import-names ${PKG} \
-		setup.py tests ${PKG}
+	${PIPRUN} flake8
 
 pylint:
 	${PIPRUN} pylint setup.py tests ${PKG}
 
-lint: dev flake8 pylint
+lint: flake8 pylint
 
 dist: clean install
 	${PIPRUN} python setup.py sdist bdist_wheel
