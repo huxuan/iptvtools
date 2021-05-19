@@ -63,10 +63,10 @@ class Playlist():
 
     def parse(self):
         """Parse contents."""
-        self._parse(self.args.inputs, udpxy=self.args.udpxy)
+        self._parse(self.args.inputs)
         self._parse(self.args.templates, is_template=True)
 
-    def _parse(self, sources, udpxy=None, is_template=False):
+    def _parse(self, sources, is_template=False):
         """Parse playlist sources."""
         for source in sources:
             lines = parsers.parse_content_to_lines(source)
@@ -94,8 +94,9 @@ class Playlist():
                             self.data[url]['params'].update(current_params)
                             self.data[url]['title'] = current_item['title']
                     else:
-                        if udpxy:
-                            line = utils.convert_url_with_udpxy(line, udpxy)
+                        if self.args.udpxy:
+                            line = utils.convert_url_with_udpxy(
+                                line, self.args.udpxy)
                         current_item['source'] = source_name
                         self.data[line] = current_item
 
