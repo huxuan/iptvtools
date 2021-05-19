@@ -10,6 +10,22 @@ Email: i(at)huxuan.org
 CONFIG = (
     'Configuration file to unify title and id.'
 )
+CHANNEL_EXCLUDE = (
+    'Channels to exclude with regex. '
+    'Note: Blacklist has higher priority than whitelist.'
+)
+CHANNEL_INCLUDE = (
+    'Channels to include with regex. '
+    'Note: Only channels in the whitelist will be included if set.'
+)
+GROUP_EXCLUDE = (
+    'Groups to exclude with regex.'
+    'Note: Blacklist has higher priority than whitelist.'
+)
+GROUP_INCLUDE = (
+    'Groups to include with regex.'
+    'Note: Only groups in the whitelist will be included if set.'
+)
 INPUTS = (
     'One or more input m3u playlist files/urls.'
 )

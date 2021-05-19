@@ -23,6 +23,10 @@ def parse_args():
     """Arguments Parsers."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--channel-exclude', help=helps.CHANNEL_EXCLUDE)
+    parser.add_argument('--channel-include', help=helps.CHANNEL_INCLUDE)
+    parser.add_argument('--group-exclude', help=helps.GROUP_EXCLUDE)
+    parser.add_argument('--group-include', help=helps.GROUP_INCLUDE)
     parser.add_argument('--min-height', default=defaults.MIN_HEIGHT, type=int,
                         help=helps.MIN_HEIGHT)
     parser.add_argument('-c', '--config', default=defaults.CONFIG,
