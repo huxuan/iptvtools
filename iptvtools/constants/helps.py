@@ -16,6 +16,7 @@ INPUTS = (
 INTERVAL = (
     'Interval in seconds between successive fetching requests.'
 )
+LOG_LEVEL = 'Log level.'
 MIN_HEIGHT = (
     'Minimum height/resolution to accept, 0 means no resolution filtering.'
 )

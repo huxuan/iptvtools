@@ -10,6 +10,7 @@ Email: i(at)huxuan.org
 CONFIG = 'config.json'
 INPUTS = ['https://iptv-org.github.io/iptv/index.m3u']
 INTERVAL = 1
+LOG_LEVEL = 'INFO'
 MIN_HEIGHT = 0
 OUTPUT = 'iptvtools.m3u'
 SORT_KEYS = ['tvg-id', 'height', 'title']

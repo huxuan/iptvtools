@@ -31,6 +31,8 @@ def parse_args():
                         help=helps.INPUTS)
     parser.add_argument('-I', '--interval', default=defaults.INTERVAL,
                         type=int, help=helps.INTERVAL)
+    parser.add_argument('-L', '--log-level', default=defaults.LOG_LEVEL,
+                        help=helps.LOG_LEVEL)
     parser.add_argument('-o', '--output', default=defaults.OUTPUT,
                         help=helps.OUTPUT)
     parser.add_argument('-r', '--replace-group-by-source', action='store_true',
@@ -54,7 +56,7 @@ def main():
     """Filter m3u playlists."""
     args = parse_args()
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=args.log_level.upper())
 
     if args.min_height or args.resolution_on_title:
         if shutil.which('ffprobe') is None:
