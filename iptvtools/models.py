@@ -96,7 +96,8 @@ class Playlist():
                     current_item = utils.unify_title_and_id(current_item)
                     current_id = current_item['id']
 
-                    group = current_item.get('params', {}).get('group-title')
+                    params = current_item.get('params', {})
+                    group = params.get('group-title', '')
                     if not skip and self.args.group_include:
                         if re.search(self.args.group_include, group):
                             logging.debug(f'Group to include: `{group}`.')
@@ -107,7 +108,7 @@ class Playlist():
                         skip = True
                         logging.debug(f'Group to exclude: `{group}`.')
 
-                    title = current_item.get('title')
+                    title = current_item.get('title', '')
                     if not skip and self.args.channel_include:
                         if re.search(self.args.channel_include, title):
                             logging.debug(f'Channel to include: `{title}`.')
