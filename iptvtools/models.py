@@ -96,30 +96,27 @@ class Playlist():
                     current_item = utils.unify_title_and_id(current_item)
                     current_id = current_item['id']
 
-                    if not skip and current_item.get('params') and \
-                            current_item['params'].get('group-title'):
-                        group = current_item['params']['group-title']
-                        if not skip and self.args.group_include:
-                            if re.search(self.args.group_include, group):
-                                logging.debug(f'Group to include: `{group}`.')
-                            else:
-                                skip = True
-                        if not skip and self.args.group_exclude and \
-                                re.search(self.args.group_exclude, group):
+                    group = current_item.get('params', {}).get('group-title')
+                    if not skip and self.args.group_include:
+                        if re.search(self.args.group_include, group):
+                            logging.debug(f'Group to include: `{group}`.')
+                        else:
                             skip = True
-                            logging.debug(f'Group to exclude: `{group}`.')
+                    if not skip and self.args.group_exclude and \
+                            re.search(self.args.group_exclude, group):
+                        skip = True
+                        logging.debug(f'Group to exclude: `{group}`.')
 
-                    if not skip and current_item.get('title'):
-                        title = current_item['title']
-                        if not skip and self.args.channel_include:
-                            if re.search(self.args.channel_include, title):
-                                logging.debug(f'Channel to include: `{title}`.')
-                            else:
-                                skip = True
-                        if not skip and self.args.channel_exclude and \
-                                re.search(self.args.channel_exclude, title):
+                    title = current_item.get('title')
+                    if not skip and self.args.channel_include:
+                        if re.search(self.args.channel_include, title):
+                            logging.debug(f'Channel to include: `{title}`.')
+                        else:
                             skip = True
-                            logging.debug(f'Channel to exclude: `{title}`.')
+                    if not skip and self.args.channel_exclude and \
+                            re.search(self.args.channel_exclude, title):
+                        skip = True
+                        logging.debug(f'Channel to exclude: `{title}`.')
 
                 else:
                     if is_template:
