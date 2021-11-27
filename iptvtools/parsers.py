@@ -7,9 +7,11 @@ File: parser.py
 Author: huxuan
 Email: i(at)huxuan.org
 """
-import logging
 import os.path
-from urllib.request import urlopen
+import re
+import tempfile
+
+import requests
 
 from iptvtools.constants import patterns
 
@@ -17,8 +19,14 @@ from iptvtools.constants import patterns
 def parse_content_to_lines(content):
     """Universal interface to split content into lines."""
     if os.path.isfile(content):
-        return _parse_from_file(content)
-    return _parse_from_url(content)
+        fp = open(content, encoding='utf-8')
+    else:
+        fp = tempfile.TemporaryFile()
+        fp.write(requests.get(content))
+        fp.seek(0)
+    for line in fp:
+        yield re.sub("[^\S ]+", "", line.strip())
+    fp.close()
 
 
 def parse_tag_inf(line):
@@ -34,17 +42,3 @@ def parse_tag_m3u(line):
     """Parse M3U content."""
     match = patterns.EXTM3U.fullmatch(line)
     return match.groupdict()
-
-
-def _parse_from_file(filename):
-    """Parse content from file."""
-    logging.info(f'Retrieving playlists from file: {filename}')
-    with open(filename, encoding='utf-8') as fin:
-        return fin.read().splitlines()
-
-
-def _parse_from_url(url):
-    """Parse content from url."""
-    logging.info(f'Retrieving playlists from url: {url}')
-    with urlopen(url) as response:  # noqa: S310
-        return response.read().decode('utf-8').splitlines()

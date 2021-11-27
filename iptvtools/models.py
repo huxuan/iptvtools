@@ -73,26 +73,24 @@ class Playlist():
     def _parse(self, sources, is_template=False):
         """Parse playlist sources."""
         for source in sources:
-            lines = parsers.parse_content_to_lines(source)
             source_name = os.path.splitext(os.path.basename(source))[0]
-
-            if lines[0].startswith(tags.M3U):
-                res = parsers.parse_tag_m3u(lines[0])
-                if res.get('tvg-url'):
-                    self.tvg_url = res.get('tvg-url')
-                lines = lines[1:]
-
             current_item = {}
             skip = False
-            for line in lines:
-                line = line.strip()
+            is_first_line = True
+            for line in parsers.parse_content_to_lines(source):
                 if not line:
                     continue
+                if is_first_line:
+                    is_first_line = False
+                    if line.startswith(tags.M3U):
+                        res = parsers.parse_tag_m3u(line)
+                        if res.get('tvg-url'):
+                            self.tvg_url = res.get('tvg-url')
+                        continue
                 if skip:
                     skip = False
                     continue
                 if line.startswith(tags.INF):
-                    line = re.sub("[^\S ]+", "", line)
                     current_item = parsers.parse_tag_inf(line)
                     current_item = utils.unify_title_and_id(current_item)
                     current_id = current_item['id']
