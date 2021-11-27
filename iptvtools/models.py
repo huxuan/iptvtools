@@ -92,7 +92,6 @@ class Playlist():
                     skip = False
                     continue
                 if line.startswith(tags.INF):
-                    line = re.sub("\W+", "", line)
                     current_item = parsers.parse_tag_inf(line)
                     current_item = utils.unify_title_and_id(current_item)
                     current_id = current_item['id']
