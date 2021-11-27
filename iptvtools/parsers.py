@@ -25,7 +25,7 @@ def parse_content_to_lines(content):
         fp.write(requests.get(content))
         fp.seek(0)
     for line in fp:
-        yield re.sub("[^\S ]+", "", line.strip())
+        yield re.sub(r'[^\S ]+', '', line.strip())
     fp.close()
 
 
