@@ -46,7 +46,7 @@ RESOLUTION_ON_TITLE = (
 )
 SORT_KEYS = (
     'List of keys to sort the channels. Valid options currently supported '
-    'are `tvg-id`, `height` and `title`.'
+    'are `group-title`, `tvg-id`, `height` and `title`.'
 )
 TEMPLATES = (
     'Template m3u files/urls with well-maintained channel information to '

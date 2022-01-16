@@ -21,8 +21,8 @@ def parse_content_to_lines(content):
     if os.path.isfile(content):
         fp = open(content, encoding='utf-8')
     else:
-        fp = tempfile.TemporaryFile()
-        fp.write(requests.get(content))
+        fp = tempfile.TemporaryFile(mode='w+t')
+        fp.write(requests.get(content).text)
         fp.seek(0)
     for line in fp:
         yield re.sub(r'[^\S ]+', '', line.strip())

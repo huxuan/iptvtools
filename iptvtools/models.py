@@ -168,4 +168,6 @@ class Playlist():
                 res.append(entry.get(key, ''))
             elif key == 'tvg-id':
                 res.append(int(entry['params'].get(key) or sys.maxsize))
+            elif key == 'group-title':
+                res.append(entry['params'].get(key) or '')
         return res
