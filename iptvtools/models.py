@@ -161,7 +161,7 @@ class Playlist():
             pbar.write(f'{url}, {status}!')
 
     def __custom_sort(self, url):
-        """Sort by tvg-id, resolution,template-order and title."""
+        """Sort by tvg-id, resolution, template-order and title."""
         res = []
         for key in self.args.sort_keys:
             entry = self.data[url]
