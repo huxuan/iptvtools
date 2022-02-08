@@ -72,6 +72,7 @@ class Playlist():
 
     def _parse(self, sources, is_template=False):
         """Parse playlist sources."""
+        template_order = 0
         for source in sources:
             source_name = os.path.splitext(os.path.basename(source))[0]
             current_item = {}
@@ -120,8 +121,10 @@ class Playlist():
 
                 else:
                     if is_template:
+                        template_order = template_order + 1
                         for url in self.id_url.get(current_id, []):
                             current_params = current_item['params']
+                            current_params['template-order'] = template_order
                             self.data[url]['params'].update(current_params)
                             self.data[url]['title'] = current_item['title']
                     else:
@@ -158,7 +161,7 @@ class Playlist():
             pbar.write(f'{url}, {status}!')
 
     def __custom_sort(self, url):
-        """Sort by tvg-id, resolution and title."""
+        """Sort by tvg-id, resolution, template-order and title."""
         res = []
         for key in self.args.sort_keys:
             entry = self.data[url]
@@ -167,6 +170,8 @@ class Playlist():
             elif key == 'title':
                 res.append(entry.get(key, ''))
             elif key == 'tvg-id':
+                res.append(int(entry['params'].get(key) or sys.maxsize))
+            elif key == 'template-order':
                 res.append(int(entry['params'].get(key) or sys.maxsize))
             elif key == 'group-title':
                 res.append(entry['params'].get(key) or '')
