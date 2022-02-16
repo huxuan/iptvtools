@@ -53,6 +53,8 @@ def parse_args():
                         help=helps.UDPXY)
     parser.add_argument('-v', '--version', action='version',
                         version=__version__)
+    parser.add_argument('-n', '--no-connectivity-check', default=defaults.NO_CONNECTIVITY_CHECK,
+                        help=helps.NO_CONNECTIVITY_CHECK)
     return parser.parse_args()
 
 

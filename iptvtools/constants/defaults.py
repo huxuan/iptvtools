@@ -17,3 +17,4 @@ SORT_KEYS = ['group-title', 'tvg-id', 'height', 'title']
 TEMPLATES = []
 TIMEOUT = 10
 UDPXY = None
+NO_CONNECTIVITY_CHECK = False
