@@ -151,14 +151,14 @@ class Playlist():
                     height = utils.check_stream(url, self.args.timeout)
                     if height == 0:
                         self.inaccessible_urls.add(url)
-                        status = 'Inaccessible'
+                        status = 'Inaccessible (0 height)'
                     elif height < self.args.min_height:
                         self.poor_urls.add(url)
                         status = 'Poor Resolution'
                     self.data[url]['height'] = height
                 elif not utils.check_connectivity(url, self.args.timeout):
                     self.inaccessible_urls.add(url)
-                    status = 'Inaccessible'
+                    status = 'Inaccessible (No connectivity)'
             else:
                 status = 'Skipped'
             pbar.write(f'{url}, {status}!')
