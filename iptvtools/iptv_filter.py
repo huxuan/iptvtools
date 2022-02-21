@@ -37,6 +37,8 @@ def parse_args():
                         type=int, help=helps.INTERVAL)
     parser.add_argument('-L', '--log-level', default=defaults.LOG_LEVEL,
                         help=helps.LOG_LEVEL)
+    parser.add_argument('-n', '--skip-connectivity-check', action='store_true',
+                        help=helps.SKIP_CONNECTIVITY_CHECK)
     parser.add_argument('-o', '--output', default=defaults.OUTPUT,
                         help=helps.OUTPUT)
     parser.add_argument('-r', '--replace-group-by-source', action='store_true',

@@ -144,20 +144,22 @@ class Playlist():
         random.shuffle(urls)
         pbar = tqdm(urls, ascii=True)
         for url in pbar:
-            time.sleep(self.args.interval)
             status = 'OK'
-            if self.args.min_height or self.args.resolution_on_title:
+            time.sleep(self.args.interval)
+            if self.args.skip_connectivity_check:
+                status = 'Skipped'
+            elif self.args.min_height or self.args.resolution_on_title:
                 height = utils.check_stream(url, self.args.timeout)
                 if height == 0:
                     self.inaccessible_urls.add(url)
-                    status = 'Inaccessible'
+                    status = 'Inaccessible (0 height)'
                 elif height < self.args.min_height:
                     self.poor_urls.add(url)
                     status = 'Poor Resolution'
                 self.data[url]['height'] = height
             elif not utils.check_connectivity(url, self.args.timeout):
                 self.inaccessible_urls.add(url)
-                status = 'Inaccessible'
+                status = 'Inaccessible (No connectivity)'
             pbar.write(f'{url}, {status}!')
 
     def __custom_sort(self, url):

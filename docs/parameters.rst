@@ -96,3 +96,10 @@ setting it will convert all the urls automatically.
 For examples, with UDPXY ``http://192.168.0.1:8888/``,
 ``rtp://123.45.67.89:1234`` will be converted to
 ``http://192.168.0.1:8888/rtp/123.45.67.89:1234``.
+
+SKIP_CONNECTIVITY_CHECK
+-----
+
+Skip any connectivity check (to be used to just apply title and id unifiers)
+use in combination with `-I 0`
+

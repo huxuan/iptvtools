@@ -58,3 +58,6 @@ TIMEOUT = (
 UDPXY = (
     'UDP Proxy for certain IPTV channels.'
 )
+SKIP_CONNECTIVITY_CHECK = (
+    'Skip connectivity check.'
+)
