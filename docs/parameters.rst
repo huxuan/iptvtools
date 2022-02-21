@@ -98,7 +98,7 @@ For examples, with UDPXY ``http://192.168.0.1:8888/``,
 ``http://192.168.0.1:8888/rtp/123.45.67.89:1234``.
 
 
-NO_CONNECTIVITY_CHECK
+SKIP_CONNECTIVITY_CHECK
 -----
 
 Skip any connectivity check (to be used to just apply title and id unifiers)

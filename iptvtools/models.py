@@ -145,7 +145,7 @@ class Playlist():
         pbar = tqdm(urls, ascii=True)
         for url in pbar:
             status = 'OK'
-            if not self.args.no_connectivity_check:
+            if not self.args.skip_connectivity_check:
                 time.sleep(self.args.interval)
                 if self.args.min_height or self.args.resolution_on_title:
                     height = utils.check_stream(url, self.args.timeout)
