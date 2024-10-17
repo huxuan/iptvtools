@@ -27,6 +27,8 @@ def parse_args():
     parser.add_argument('--channel-include', help=helps.CHANNEL_INCLUDE)
     parser.add_argument('--group-exclude', help=helps.GROUP_EXCLUDE)
     parser.add_argument('--group-include', help=helps.GROUP_INCLUDE)
+    parser.add_argument('--max-height', default=defaults.MAX_HEIGHT, type=int,
+                        help=helps.MAX_HEIGHT)
     parser.add_argument('--min-height', default=defaults.MIN_HEIGHT, type=int,
                         help=helps.MIN_HEIGHT)
     parser.add_argument('-c', '--config', default=defaults.CONFIG,
@@ -64,7 +66,7 @@ def main():
 
     logging.basicConfig(level=args.log_level.upper())
 
-    if args.min_height or args.resolution_on_title:
+    if args.max_height or args.min_height or args.resolution_on_title:
         if shutil.which('ffprobe') is None:
             raise exceptions.FFmpegNotInstalledError()
 
@@ -76,9 +78,12 @@ def main():
     if playlist.inaccessible_urls:
         logging.info('Inaccessible Urls:')
         logging.info('\n'.join(sorted(playlist.inaccessible_urls)))
-    if playlist.poor_urls:
-        logging.info('Poor resolution Urls:')
-        logging.info('\n'.join(sorted(playlist.poor_urls)))
+    if playlist.low_res_urls:
+        logging.info('Low resolution Urls:')
+        logging.info('\n'.join(sorted(playlist.low_res_urls)))
+    if playlist.high_res_urls:
+        logging.info('High resolution Urls:')
+        logging.info('\n'.join(sorted(playlist.high_res_urls)))
 
 
 if __name__ == '__main__':
