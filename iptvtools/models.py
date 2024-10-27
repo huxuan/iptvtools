@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 from iptvtools import parsers
 from iptvtools import utils
+from iptvtools.constants import defaults
 from iptvtools.constants import tags
 
 
@@ -30,7 +31,8 @@ class Playlist():
         self.data = {}
         self.id_url = {}
         self.inaccessible_urls = set()
-        self.poor_urls = set()
+        self.low_res_urls = set()
+        self.high_res_urls = set()
         self.tvg_url = None
 
     def export(self):
@@ -41,7 +43,11 @@ class Playlist():
             res[0] += f' x-tvg-url="{self.tvg_url}"'
         for url in sorted(self.data, key=self.__custom_sort):
 
-            if url in self.inaccessible_urls or url in self.poor_urls:
+            if (
+                url in self.inaccessible_urls
+                or url in self.low_res_urls
+                or url in self.high_res_urls
+            ):
                 continue
 
             entry = self.data[url]
@@ -148,14 +154,24 @@ class Playlist():
             time.sleep(self.args.interval)
             if self.args.skip_connectivity_check:
                 status = 'Skipped'
-            elif self.args.min_height or self.args.resolution_on_title:
+            elif (
+                self.args.max_height
+                or self.args.min_height
+                or self.args.resolution_on_titl
+            ):
                 height = utils.check_stream(url, self.args.timeout)
                 if height == 0:
                     self.inaccessible_urls.add(url)
                     status = 'Inaccessible (0 height)'
                 elif height < self.args.min_height:
-                    self.poor_urls.add(url)
-                    status = 'Poor Resolution'
+                    self.low_res_urls.add(url)
+                    status = 'Low Resolution'
+                elif (
+                    self.args.max_height != defaults.MAX_HEIGHT
+                    and height > self.args.max_height
+                ):
+                    self.high_res_urls.add(url)
+                    status = 'High Resolution'
                 self.data[url]['height'] = height
             elif not utils.check_connectivity(url, self.args.timeout):
                 self.inaccessible_urls.add(url)

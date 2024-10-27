@@ -33,6 +33,9 @@ INTERVAL = (
     'Interval in seconds between successive fetching requests.'
 )
 LOG_LEVEL = 'Log level.'
+MAX_HEIGHT = (
+    'Maximum height/resolution to accept, -1 means no resolution filtering.'
+)
 MIN_HEIGHT = (
     'Minimum height/resolution to accept, 0 means no resolution filtering.'
 )
