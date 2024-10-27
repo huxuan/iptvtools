@@ -24,7 +24,7 @@ Sphinx = "*"
 flake8-noqa = "*"
 
 [packages]
-iptvtools = {editable = true, path = "."}
+iptvtools = {file = ".", editable = true}
 
 [requires]
 python_version = "3"
