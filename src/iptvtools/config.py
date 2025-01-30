@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Configuration for iptvtools.
+"""Configuration for iptvtools.
 
 File: config.py
 Author: huxuan
 Email: i(at)huxuan.org
 """
+
 import json
 import os
 import os.path
