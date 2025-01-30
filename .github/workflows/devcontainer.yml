@@ -1,0 +1,83 @@
+name: DevContainer
+
+on:
+  pull_request:
+    paths:
+      - .devcontainer/Dockerfile
+      - .devcontainer/Dockerfile.dockerignore
+      - .github/workflows/devcontainer.yml
+      - Makefile
+  push:
+    branches:
+      - main
+    paths:
+      - .devcontainer/Dockerfile
+      - .devcontainer/Dockerfile.dockerignore
+      - .github/workflows/devcontainer.yml
+      - Makefile
+  workflow_dispatch: null
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  dev-container-publish:
+    permissions:
+      packages: write
+    runs-on: ubuntu-24.04
+    steps:
+      - run: env | sort
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up authentication
+        run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+      - name: Set up BuildKit
+        run: |
+          docker context create builder
+          docker buildx create builder --name container --driver docker-container --use
+          docker buildx inspect --bootstrap --builder container
+      - name: Build the dev container
+        run: |
+          docker buildx build . \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --cache-from type=registry,ref=ghcr.io/${{ github.repository }}/dev-cache:py${{ matrix.python-version }} \
+            --file .devcontainer/Dockerfile \
+            --load \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            --target dev
+      - name: Test the dev container
+        run: |
+          docker run --rm \
+            -e CI=true \
+            -v ${PWD}:/workspace \
+            ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            make dev lint test doc build
+      - name: Build the prod container
+        run: |
+          docker buildx build . \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --file .devcontainer/Dockerfile \
+            --load \
+            --tag ghcr.io/${{ github.repository }}:py${{ matrix.python-version }} \
+            --target prod
+      - name: Test the prod container
+        run: docker run --rm ghcr.io/${{ github.repository }}:py${{ matrix.python-version }}
+      - name: Push the dev container
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx build . \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --cache-to type=registry,ref=ghcr.io/${{ github.repository }}/dev-cache:py${{ matrix.python-version }},mode=max \
+            --file .devcontainer/Dockerfile \
+            --push \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            --target dev
+    strategy:
+      matrix:
+        python-version:
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+          - '3.13'

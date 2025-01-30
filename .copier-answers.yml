@@ -1,0 +1,25 @@
+_commit: v0.0.62
+_src_path: gh:serious-scaffold/ss-python
+author_email: i@huxuan.org
+author_name: huxuan
+copyright_holder: huxuan
+copyright_license: MIT License
+copyright_year: 2019-2025
+coverage_threshold: 100
+default_py: '3.12'
+development_status: Beta
+max_py: '3.13'
+min_py: '3.9'
+module_name: iptvtools
+organization_name: huxuan.org
+package_name: iptvtools
+platforms:
+- macos
+- ubuntu
+- windows
+project_description: A set of scripts that help to better IPTV experience.
+project_name: IPTVTools
+readme_content: '## A multiline README content here'
+repo_name: iptvtools
+repo_namespace: huxuan
+repo_platform: github

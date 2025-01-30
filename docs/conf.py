@@ -1,56 +1,76 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""Configuration file for the Sphinx documentation builder.
 
-# -- Path setup --------------------------------------------------------------
+For the full list of built-in configuration values, see the documentation:
+https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+from importlib import metadata
 
-import os
-import sys
-sys.path.insert(0, os.path.abspath('..'))
-import iptvtools
+# -- Project information ---------------------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+author = "huxuan"
+copyright = "2023, huxuan"
+project = "IPTVTools"
+release = metadata.version("iptvtools")
+version = ".".join(release.split(".")[:2])
 
 
-# -- Project information -----------------------------------------------------
+# -- General configuration -------------------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-project = 'IPTVTools'
-copyright = '2020, Xuan (Sean) Hu'
-author = 'Xuan (Sean) Hu'
-version = iptvtools.__version__
-release = iptvtools.__version__
-
-# -- General configuration ---------------------------------------------------
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 extensions = [
-    'sphinxcontrib.programoutput',
+    "myst_parser",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx_click",
+    "sphinx_design",
+    "sphinxcontrib.autodoc_pydantic",
 ]
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+templates_path = ["_templates"]
+html_theme_options = {
+    "announcement": (
+        "<em>IPTVTools</em> "
+        "is in the <strong>Beta</strong> phase. "
+        "Changes and potential instability should be anticipated. "
+        "Any feedback, comments, suggestions and contributions are welcome!"
+    ),
+}
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# -- Options for HTML output -----------------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+html_theme = "furo"
+html_static_path = ["_static"]
 
-master_doc = "index"
+# -- Options for autodoc extension  ----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
 
-# -- Options for HTML output -------------------------------------------------
+autodoc_default_options = {
+    "members": None,
+}
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'sphinx_rtd_theme'
+# -- Options for autodoc_pydantic extension  -------------------------------------------
+# https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+autodoc_pydantic_settings_show_json = False
+
+# -- Options for myst-parser extension  ------------------------------------------------
+# https://myst-parser.readthedocs.io/en/latest/configuration.html
+
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+]
+myst_heading_anchors = 3
+myst_url_schemes = {
+    "http": None,
+    "https": None,
+    "vscode": None,
+}

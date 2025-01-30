@@ -1,0 +1,32 @@
+{
+    "customizations": {
+        // Configure extensions specific to VS Code.
+        "vscode": {
+            "extensions": [
+                "DavidAnson.vscode-markdownlint",
+                "ExecutableBookProject.myst-highlight",
+                "charliermarsh.ruff",
+                "ms-python.mypy-type-checker",
+                "ms-python.python",
+                "richie5um2.vscode-sort-json",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    },
+    "image": "ghcr.io/huxuan/iptvtools/dev:py3.12",
+    // Force the image update to ensure the latest version which might be a bug.
+    // Reference: https://github.com/microsoft/vscode-remote-release/issues/9391
+    "initializeCommand": "docker pull ghcr.io/huxuan/iptvtools/dev:py3.12",
+    // Use a targeted named volume for .venv folder to improve disk performance.
+    // Reference: https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-targeted-named-volume
+    "mounts": [
+        "source=${localWorkspaceFolderBasename}-venv,target=${containerWorkspaceFolder}/.venv,type=volume"
+    ],
+    "name": "iptvtools",
+    // Set proper permission for the .venv folder when the container created.
+    "postCreateCommand": "sudo chown iptvtools:iptvtools .venv",
+    // Prepare the development environment when the container starts.
+    "postStartCommand": "make dev",
+    // Use the non-root user in the container.
+    "remoteUser": "iptvtools"
+}
