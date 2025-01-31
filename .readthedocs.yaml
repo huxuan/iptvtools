@@ -23,7 +23,7 @@ build:
     post_system_dependencies:
       - env | sort
     pre_create_environment:
-      - PIPX_BIN_DIR=$READTHEDOCS_VIRTUALENV_PATH/bin pipx install pdm==2.22.2
+      - PIPX_BIN_DIR=$READTHEDOCS_VIRTUALENV_PATH/bin pipx install pdm==2.22.3
     post_install:
       - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH make dev-doc
     post_build:

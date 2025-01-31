@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "constraints": {
-        "pdm": "2.22.2",
+        "pdm": "2.22.3",
         "python": "==3.12"
     },
     "customManagers": [
@@ -20,7 +20,8 @@
                 "^docs/.+\\.md$"            ],
             "matchStrings": [
                 "pip install.* (?<depName>.*?)(\\[.*?\\])?==(?<currentValue>.*?)[\"\n]",
-                "pipx install( --force)? (?<depName>.*?)(\\[.*?\\])?==(?<currentValue>.*?)\\s"
+                "pipx install( --force)? (?<depName>.*?)(\\[.*?\\])?==(?<currentValue>.*?)\\s",
+                "pipx list --short \\| grep -q \"(?<depName>.*?)(\\[.*?\\])? (?<currentValue>.*?)\""
             ]
         },
         {
@@ -126,7 +127,7 @@
                 "commands": [
                     "git stash",
                     "pip install copier==9.4.1",
-                    "copier update --defaults --vcs-ref {{{newVersion}}}"
+                    "copier update --skip-answered --defaults --vcs-ref {{{newVersion}}}"
                 ]
             },
             "semanticCommitScope": "copier-template"

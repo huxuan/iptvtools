@@ -29,7 +29,42 @@ A set of scripts that help to better IPTV experience.
 > Changes and potential instability should be anticipated.
 > Any feedback, comments, suggestions and contributions are welcome!
 
-## A multiline README content here
+## Features
+
+Scripts currently provided:
+
+- [iptv-filter](https://iptvtools.readthedocs.io/en/latest/scripts/iptv-filter.html)
+  - Merge from different resources.
+  - Check the tcp/udp connectivity.
+  - Filter by custom criteria, e.g. resolution.
+  - Match with templates and EPG.
+  - Format the url with UDPxy if provided.
+  - Unify channels' titles.
+
+Features planned on the road:
+
+- [ ] Scan certain ip and port range to find new channels.
+- [ ] Establish a lightweight database for routine maintenance.
+
+Besides, all scripts should be lightweight and able to keep running regularly after proper configuration.
+
+Last but not least, any ideas, comments and suggestions are welcome!
+
+## Prerequisites
+
+To filter by stream information, e.g., resolution/height, [ffmpeg](https://www.ffmpeg.org/) (or [ffprobe](https://www.ffmpeg.org/ffprobe.html) more precisely) is needed, please install according to the [documentation](https://www.ffmpeg.org/download.html).
+
+## Installation
+
+It is recommended to manage iptvtools via [pipx](https://github.com/pypa/pipx):
+
+```shell
+pipx install iptvtools
+```
+
+## Usage
+
+Please refer to the [documentation](https://iptvtools.readthedocs.io/) while some useful information in [wiki](https://github.com/huxuan/iptvtools/wiki).
 ## 📜 License
 
 MIT License, for more details, see the [LICENSE](https://github.com/huxuan/iptvtools/blob/main/LICENSE) file.

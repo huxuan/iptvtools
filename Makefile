@@ -50,7 +50,7 @@ dev-%: install
 # Prepare the development environment.
 # Install the package in editable mode with all optional dependencies and pre-commit hook.
 dev: install
-	pdm install --lockfile pdm.dev.lock
+	pdm install --lockfile pdm.dev.lock --no-default --dev
 	if [ "$(CI)" != "true" ] && command -v pre-commit > /dev/null 2>&1; then pre-commit install; fi
 
 # Lock both prod and dev dependencies.
@@ -60,13 +60,13 @@ lock:
 
 # Install standalone tools
 prerequisites:
-	pipx install --force check-jsonschema==0.30.0
-	pipx install --force codespell[toml]==2.3.0
-	pipx install --force pdm==2.22.2
-	pipx install --force pre-commit==4.0.1
-	pipx install --force pyproject-fmt==2.5.0
-	pipx install --force ruff==0.9.2
-	pipx install --force watchfiles==1.0.4
+	pipx list --short | grep -q "check-jsonschema 0.31.0" || pipx install --force check-jsonschema==0.31.0
+	pipx list --short | grep -q "codespell 2.4.1" || pipx install --force codespell[toml]==2.4.1
+	pipx list --short | grep -q "pdm 2.22.3" || pipx install --force pdm==2.22.3
+	pipx list --short | grep -q "pre-commit 4.1.0" || pipx install --force pre-commit==4.1.0
+	pipx list --short | grep -q "pyproject-fmt 2.5.0" || pipx install --force pyproject-fmt==2.5.0
+	pipx list --short | grep -q "ruff 0.9.3" || pipx install --force ruff==0.9.3
+	pipx list --short | grep -q "watchfiles 1.0.4" || pipx install --force watchfiles==1.0.4
 
 ########################################################################################
 # Lint and pre-commit
@@ -96,7 +96,7 @@ codespell:
 check-jsonschema:
 	check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
 	check-jsonschema --builtin-schema vendor.readthedocs .readthedocs.yaml
-	check-jsonschema --builtin-schema vendor.renovate .renovaterc.json
+	check-jsonschema --builtin-schema vendor.renovate --regex-variant nonunicode .renovaterc.json
 
 # Check lint with all linters.
 lint: mypy ruff ruff-format pyproject-fmt codespell check-jsonschema

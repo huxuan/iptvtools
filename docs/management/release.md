@@ -11,24 +11,26 @@ The release configuration is located in the root directory of the project:
 
 Based on this configuration, the following trigger rules apply:
 
-* A **major** release is triggered by a 'BREAKING CHANGE' or 'BREAKING-CHANGE' in the footer of the commit message.
-* A **minor** release is triggered when the latest commit type is `feat`.
-* A **patch** release is triggered when the latest commit type is `fix`, `perf`, `refactor` or `revert`.
-* No release is triggered if the latest commit type is any other type or has a `no-release` scope.
+* A **major** release is triggered by a 'BREAKING CHANGE' or 'BREAKING-CHANGE' in the footer or has a `major-release` scope.
+* A **minor** release is triggered when the commit type is `feat` or has a `minor-release` scope.
+* A **patch** release is triggered when the commit type is `fix`, `perf`, `refactor` or `revert` or has a `patch-release` scope.
+* No release is triggered if the commit type is any other type or has a `no-release` scope.
 
 ## Commit message examples
 
 ### Major release
 
-```text
-feat: drop Python 3.8 support
+* ```text
+  feat: drop Python 3.8 support
 
-BREAKING CHANGE: drop Python 3.8 support
-```
+  BREAKING CHANGE: drop Python 3.8 support
+  ```
+* `chore(major-release): a major release`
 
 ### Minor release
 
 * `feat: add an awesome feature`
+* `chore(minor-release): a minor release`
 
 ### Patch release
 
@@ -36,6 +38,7 @@ BREAKING CHANGE: drop Python 3.8 support
 * `perf: performance improvement for the core`
 * `refactor: refactor the base module`
 * `revert: revert a buggy implementation`
+* `chore(patch-release): a patch release`
 
 ### No release
 

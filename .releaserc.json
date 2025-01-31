@@ -53,6 +53,18 @@
                         "release": false
                     },
                     {
+                        "scope": "*major-release*",
+                        "release": "major"
+                    },
+                    {
+                        "scope": "*minor-release*",
+                        "release": "minor"
+                    },
+                    {
+                        "scope": "*patch-release*",
+                        "release": "patch"
+                    },
+                    {
                         "scope": "*no-release*",
                         "release": false
                     }

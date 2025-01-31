@@ -10,9 +10,9 @@ name = "iptvtools"
 description = "A set of scripts that help to better IPTV experience."
 readme = "README.md"
 keywords = [
-    "copier-template",
-    "full-development-lifecycle",
-    "project-template",
+    "filter",
+    "iptvtools",
+    "m3u",
     "serious-scaffold",
 ]
 license = { text = "MIT" }
@@ -23,7 +23,9 @@ requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -43,28 +45,28 @@ urls.issue = "https://github.com/huxuan/iptvtools/issues"
 urls.repository = "https://github.com/huxuan/iptvtools"
 scripts.iptvtools-cli = "iptvtools.cli:cli"
 
-[tool.pdm]
-distribution = true
-
-[tool.pdm.dev-dependencies]
+[dependency-groups]
+test = [
+    "coverage",
+    "pytest",
+]
 doc = [
-    "Sphinx",
     "autodoc-pydantic",
     "coverage",
     "furo",
     "mypy[reports]",
     "myst-parser",
     "pytest",
+    "sphinx",
     "sphinx-click",
     "sphinx-design",
 ]
 lint = [
     "mypy",
 ]
-test = [
-    "coverage",
-    "pytest",
-]
+
+[tool.pdm]
+distribution = true
 
 [tool.setuptools_scm]
 fallback_version = "0.0.0"

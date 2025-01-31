@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   delete-untagged-packages:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Delete untagged dev-cache packages
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
