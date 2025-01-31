@@ -9,7 +9,7 @@ coverage_threshold: 100
 default_py: '3.12'
 development_status: Beta
 max_py: '3.13'
-min_py: '3.9'
+min_py: '3.10'
 module_name: iptvtools
 organization_name: huxuan.org
 package_name: iptvtools
@@ -18,7 +18,7 @@ platforms:
 - linux
 - windows
 project_description: A set of scripts that help to better IPTV experience.
-project_keywords: iptvtools, m3u, filter
+project_keywords: iptvtools, m3u, iptv-filter
 project_name: IPTVTools
 readme_content: "## Features\n\nScripts currently provided:\n\n- [iptv-filter](https://iptvtools.readthedocs.io/en/latest/scripts/iptv-filter.html)\n\
     \  - Merge from different resources.\n  - Check the tcp/udp connectivity.\n  -\

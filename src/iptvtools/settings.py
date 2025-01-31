@@ -2,7 +2,6 @@
 
 import logging
 from logging import getLevelName
-from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -17,7 +16,7 @@ class GlobalSettings(BaseSettings):
 class Settings(BaseSettings):
     """Project specific settings."""
 
-    logging_level: Optional[str] = getLevelName(logging.INFO)
+    logging_level: str | None = getLevelName(logging.INFO)
     """Default logging level for the project."""
 
     model_config = SettingsConfigDict(
