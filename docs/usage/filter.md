@@ -9,7 +9,7 @@
 There is a [well-maintained IPTV list](https://gist.github.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820) only for Beijing Unicom and a [well-maintained templates & EPG](http://epg.51zmt.top:8000/) mainly for China. So for me::
 
 ```bash
-$ iptv-filter \
+$ iptvtools-cli filter \
 -i https://gist.githubusercontent.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820/raw/11107d2dcfe2f5785e7ada94bb44c0cd349191c5/bj-unicom-iptv.m3u \
 -t http://epg.51zmt.top:8000/test.m3u
 ```
@@ -17,7 +17,7 @@ $ iptv-filter \
 With UDPXY, it becomes::
 
 ```bash
-$ iptv-filter \
+$ iptvtools-cli filter \
 -i https://gist.githubusercontent.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820/raw/11107d2dcfe2f5785e7ada94bb44c0cd349191c5/bj-unicom-iptv.m3u \
 -t http://epg.51zmt.top:8000/test.m3u \
 -u http://192.168.0.1:8888
