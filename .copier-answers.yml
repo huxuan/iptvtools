@@ -17,7 +17,7 @@ platforms:
 - macos
 - linux
 project_description: A set of scripts that help to better IPTV experience.
-project_keywords: iptvtools, m3u, iptv-filter
+project_keywords: iptvtools, iptvtools-cli, m3u filter
 project_name: IPTVTools
 readme_content: "## Features\n\nScripts currently provided:\n\n- iptvtools-cli filter\n\
     \  - Merge from different resources.\n  - Check the tcp/udp connectivity.\n  -\

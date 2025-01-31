@@ -10,9 +10,9 @@ name = "iptvtools"
 description = "A set of scripts that help to better IPTV experience."
 readme = "README.md"
 keywords = [
-    "iptv-filter",
     "iptvtools",
-    "m3u",
+    "iptvtools-cli",
+    "m3u filter",
     "serious-scaffold",
 ]
 license = { text = "MIT" }
