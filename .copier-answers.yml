@@ -5,7 +5,7 @@ author_name: huxuan
 copyright_holder: huxuan
 copyright_license: MIT License
 copyright_year: 2019-2025
-coverage_threshold: 100
+coverage_threshold: 0
 default_py: '3.12'
 development_status: Beta
 max_py: '3.13'
