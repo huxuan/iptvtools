@@ -12,13 +12,16 @@ import random
 import re
 import sys
 import time
-from argparse import Namespace
-from typing import Any
+from typing import TYPE_CHECKING
 
 from tqdm import tqdm
 
 from iptvtools import parsers, utils
 from iptvtools.constants import defaults, tags
+
+if TYPE_CHECKING:
+    from argparse import Namespace
+    from typing import Any
 
 
 class Playlist:

@@ -10,7 +10,10 @@ import json
 import os
 import os.path
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class MetaConfig(type):

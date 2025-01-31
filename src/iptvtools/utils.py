@@ -15,12 +15,16 @@ from subprocess import (
     Popen,
     TimeoutExpired,
 )
-from typing import Any
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import requests
 
 from iptvtools.config import Config
+
+if TYPE_CHECKING:
+    from typing import Any
+
 
 PROBE_COMMAND = (
     "ffprobe -hide_banner -show_streams -select_streams v -of json=c=1 -v quiet"
