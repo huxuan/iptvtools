@@ -9,13 +9,15 @@ Email: i(at)huxuan.org
 import os.path
 import re
 import tempfile
+from collections.abc import Iterator
+from typing import Any
 
 import requests
 
 from iptvtools.constants import patterns
 
 
-def parse_content_to_lines(content):
+def parse_content_to_lines(content: str) -> Iterator[str]:
     """Universal interface to split content into lines."""
     if os.path.isfile(content):
         fp = open(content, encoding="utf-8")
@@ -28,16 +30,16 @@ def parse_content_to_lines(content):
     fp.close()
 
 
-def parse_tag_inf(line):
+def parse_tag_inf(line: str) -> dict[str, Any]:
     """Parse INF content."""
     match = patterns.EXTINF.fullmatch(line)
-    res = match.groupdict()
+    res = match and match.groupdict() or {}
     if "params" in res:
         res["params"] = dict(patterns.PARAMS.findall(res["params"]))
     return res
 
 
-def parse_tag_m3u(line):
+def parse_tag_m3u(line: str) -> dict[str, Any]:
     """Parse M3U content."""
     match = patterns.EXTM3U.fullmatch(line)
-    return match.groupdict()
+    return match and match.groupdict() or {}

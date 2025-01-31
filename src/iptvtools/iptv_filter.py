@@ -9,14 +9,15 @@ Email: i(at)huxuan.org
 import argparse
 import logging
 import shutil
+from argparse import Namespace
 
-from iptvtools import __version__, exceptions
+from iptvtools import exceptions
 from iptvtools.config import Config
 from iptvtools.constants import defaults, helps
 from iptvtools.models import Playlist
 
 
-def parse_args():
+def parse_args() -> Namespace:
     """Arguments Parsers."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -70,11 +71,10 @@ def parse_args():
         "-T", "--timeout", default=defaults.TIMEOUT, type=int, help=helps.TIMEOUT
     )
     parser.add_argument("-u", "--udpxy", default=defaults.UDPXY, help=helps.UDPXY)
-    parser.add_argument("-v", "--version", action="version", version=__version__)
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     """Filter m3u playlists."""
     args = parse_args()
 

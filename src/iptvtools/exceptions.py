@@ -14,7 +14,7 @@ class BaseCustomException(RuntimeError):
 class FFmpegNotInstalledError(BaseCustomException):
     """Raise when FFmpeg is not installed."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init for FfmpegNotInstalledError."""
         super().__init__(
             "Need `FFmpeg` for resolution related processing.\n"

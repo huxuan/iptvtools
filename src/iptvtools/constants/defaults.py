@@ -14,6 +14,6 @@ MAX_HEIGHT = -1
 MIN_HEIGHT = 0
 OUTPUT = "iptvtools.m3u"
 SORT_KEYS = ["group-title", "tvg-id", "height", "title"]
-TEMPLATES = []
+TEMPLATES: list[str] = []
 TIMEOUT = 10
 UDPXY = None

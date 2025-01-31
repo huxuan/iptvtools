@@ -12,6 +12,8 @@ import random
 import re
 import sys
 import time
+from argparse import Namespace
+from typing import Any
 
 from tqdm import tqdm
 
@@ -22,17 +24,17 @@ from iptvtools.constants import defaults, tags
 class Playlist:
     """Playlist model."""
 
-    def __init__(self, args):
+    def __init__(self, args: Namespace) -> None:
         """Init for Playlist."""
         self.args = args
-        self.data = {}
-        self.id_url = {}
-        self.inaccessible_urls = set()
-        self.low_res_urls = set()
-        self.high_res_urls = set()
+        self.data: dict[str, Any] = {}
+        self.id_url: dict[str, Any] = {}
+        self.inaccessible_urls: set[str] = set()
+        self.low_res_urls: set[str] = set()
+        self.high_res_urls: set[str] = set()
         self.tvg_url = None
 
-    def export(self):
+    def export(self) -> None:
         """Export playlist information."""
         res = []
         res.append(tags.M3U)
@@ -63,14 +65,14 @@ class Playlist:
 
         open(self.args.output, "w", encoding="utf-8").write("\n".join(res))
 
-    def parse(self):
+    def parse(self) -> None:
         """Parse contents."""
         self._parse(self.args.inputs)
         logging.debug(self.data)
         self._parse(self.args.templates, is_template=True)
         logging.debug(self.data)
 
-    def _parse(self, sources, is_template=False):
+    def _parse(self, sources: list[str], is_template: bool = False) -> None:
         """Parse playlist sources."""
         template_order = 0
         for source in sources:
@@ -143,7 +145,7 @@ class Playlist:
                             self.id_url[current_id] = []
                         self.id_url[current_id].append(line)
 
-    def filter(self):
+    def filter(self) -> None:
         """Filter process."""
         urls = list(self.data.keys())
         random.shuffle(urls)
@@ -177,7 +179,7 @@ class Playlist:
                 status = "Inaccessible (No connectivity)"
             pbar.write(f"{url}, {status}!")
 
-    def __custom_sort(self, url):
+    def __custom_sort(self, url: str) -> list[Any]:
         """Sort by tvg-id, resolution, template-order and title."""
         res = []
         for key in self.args.sort_keys:

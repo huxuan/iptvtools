@@ -15,6 +15,7 @@ from subprocess import (
     Popen,
     TimeoutExpired,
 )
+from typing import Any
 from urllib.parse import urlparse
 
 import requests
@@ -31,7 +32,7 @@ UDP_SCHEME = (
 )
 
 
-def convert_url_with_udpxy(orig_url, udpxy):
+def convert_url_with_udpxy(orig_url: str, udpxy: str) -> str:
     """Convert url with udpxy."""
     parsed_url = urlparse(orig_url)
     if parsed_url.scheme in UDP_SCHEME:
@@ -39,7 +40,7 @@ def convert_url_with_udpxy(orig_url, udpxy):
     return orig_url
 
 
-def unify_title_and_id(item):
+def unify_title_and_id(item: dict[str, Any]) -> dict[str, Any]:
     """Unify title and id."""
     for title_unifier in sorted(Config.title_unifiers):
         if title_unifier in item["title"]:
@@ -47,7 +48,7 @@ def unify_title_and_id(item):
                 title_unifier, Config.title_unifiers[title_unifier]
             )
 
-    if "tvg-name" in item.get("params"):
+    if "tvg-name" in item.get("params", {}):
         item["id"] = item["params"]["tvg-name"]
     else:
         item["id"] = item["title"]
@@ -59,7 +60,7 @@ def unify_title_and_id(item):
     return item
 
 
-def probe(url, timeout=None):
+def probe(url: str, timeout: int | None = None) -> Any:
     """Invoke probe to get stream information."""
     outs = None
     with Popen(  # noqa: S603
@@ -77,15 +78,15 @@ def probe(url, timeout=None):
     return None
 
 
-def check_stream(url, timeout=None):
+def check_stream(url: str, timeout: int | None = None) -> int:
     """Check stream information and return height."""
     stream_info = probe(url, timeout)
     if stream_info and stream_info.get("streams"):
-        return max([stream.get("height", 0) for stream in stream_info["streams"]])
+        return max([int(stream.get("height", 0)) for stream in stream_info["streams"]])
     return 0
 
 
-def check_connectivity(url, timeout=None):
+def check_connectivity(url: str, timeout: int | None = None) -> bool:
     """Check connectivity."""
     parsed_url = urlparse(url)
     if parsed_url.scheme in UDP_SCHEME:
@@ -93,7 +94,7 @@ def check_connectivity(url, timeout=None):
     return check_http_connectivity(url, timeout)
 
 
-def check_udp_connectivity(url, timeout=None):
+def check_udp_connectivity(url: str, timeout: int | None = None) -> bool:
     """Check UDP connectivity."""
     ipaddr, port = url.rsplit(":", 1)
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -111,7 +112,7 @@ def check_udp_connectivity(url, timeout=None):
     return False
 
 
-def check_http_connectivity(url, timeout=None):
+def check_http_connectivity(url: str, timeout: int | None = None) -> bool:
     """Check HTTP connectivity."""
     try:
         return requests.get(url, timeout=timeout, stream=True).ok
@@ -119,7 +120,7 @@ def check_http_connectivity(url, timeout=None):
         return False
 
 
-def height_to_resolution(height):
+def height_to_resolution(height: int) -> str:
     """Convert height to resolution."""
     if not height:
         return ""
