@@ -16,7 +16,6 @@ package_name: iptvtools
 platforms:
 - macos
 - linux
-- windows
 project_description: A set of scripts that help to better IPTV experience.
 project_keywords: iptvtools, m3u, iptv-filter
 project_name: IPTVTools
