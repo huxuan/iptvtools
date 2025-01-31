@@ -3,6 +3,9 @@
 ```{toctree}
 :hidden:
 Overview <self>
+installation
+scripts
+parameters
 management/index
 development/index
 advanced/index
