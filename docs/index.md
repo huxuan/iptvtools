@@ -3,7 +3,6 @@
 ```{toctree}
 :hidden:
 Overview <self>
-installation
 scripts
 parameters
 management/index
