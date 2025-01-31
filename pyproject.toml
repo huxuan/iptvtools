@@ -62,9 +62,13 @@ doc = [
     "sphinx",
     "sphinx-click",
     "sphinx-design",
+    "types-requests>=2.32.0.20241016",
+    "types-tqdm>=4.67.0.20241221",
 ]
 lint = [
     "mypy",
+    "types-requests>=2.32.0.20241016",
+    "types-tqdm>=4.67.0.20241221",
 ]
 
 [tool.pdm]
