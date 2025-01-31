@@ -37,8 +37,10 @@ dynamic = [
     "version",
 ]
 dependencies = [
-    "click",
-    "pydantic-settings",
+    "click>=8.1.8",
+    "pydantic-settings>=2.7.1",
+    "requests>=2.32.3",
+    "tqdm>=4.67.1",
 ]
 urls.documentation = "https://huxuan.github.io/iptvtools"
 urls.issue = "https://github.com/huxuan/iptvtools/issues"
