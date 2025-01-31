@@ -44,7 +44,6 @@ urls.documentation = "https://huxuan.github.io/iptvtools"
 urls.issue = "https://github.com/huxuan/iptvtools/issues"
 urls.repository = "https://github.com/huxuan/iptvtools"
 scripts.iptvtools-cli = "iptvtools.cli:cli"
-scripts.iptv-filter = "iptvtools.iptv_filter:main"
 
 [dependency-groups]
 test = [
