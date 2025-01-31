@@ -89,7 +89,7 @@ def filter(
     logging.basicConfig(level=log_level.upper())
 
     if (max_height or min_height or resolution_on_title) and shutil.which(
-        "ffprob"
+        "ffprobe"
     ) is None:
         raise exceptions.FFmpegNotInstalledError()
 
