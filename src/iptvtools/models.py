@@ -218,7 +218,7 @@ class Playlist:
                 res.append(entry.get(key, ""))
             elif key == "tvg-id":
                 res.append(
-                    int(re.sub(r"\D", "", entry["params"].get(key)) or sys.maxsize)
+                    int(re.sub(r"\D", "", entry["params"].get(key, "")) or sys.maxsize)
                 )
             elif key == "template-order":
                 res.append(int(entry["params"].get(key) or sys.maxsize))
