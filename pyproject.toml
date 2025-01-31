@@ -1,3 +1,139 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta:__legacy__"
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools==75.8.0",
+    "setuptools-scm==8.1.0",
+]
+
+[project]
+name = "iptvtools"
+description = "A set of scripts that help to better IPTV experience."
+readme = "README.md"
+keywords = [
+    "iptvtools",
+    "iptvtools-cli",
+    "m3u filter",
+    "serious-scaffold",
+]
+license = { text = "MIT" }
+authors = [
+    { email = "i@huxuan.org", name = "huxuan" },
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dynamic = [
+    "version",
+]
+dependencies = [
+    "click>=8.1.8",
+    "pydantic-settings>=2.7.1",
+    "requests>=2.32.3",
+    "tqdm>=4.67.1",
+]
+urls.documentation = "https://huxuan.github.io/iptvtools"
+urls.issue = "https://github.com/huxuan/iptvtools/issues"
+urls.repository = "https://github.com/huxuan/iptvtools"
+scripts.iptvtools-cli = "iptvtools.cli:cli"
+
+[dependency-groups]
+test = [
+    "coverage>=7.6.10",
+    "pytest>=8.3.4",
+]
+doc = [
+    "autodoc-pydantic>=2.2.0",
+    "coverage>=7.6.10",
+    "furo>=2024.8.6",
+    "mypy[reports]>=1.14.1",
+    "myst-parser>=4.0.0",
+    "pytest>=8.3.4",
+    "sphinx>=8.1.3",
+    "sphinx-click>=6.0.0",
+    "sphinx-design>=0.6.1",
+    "types-requests>=2.32.0.20241016",
+    "types-tqdm>=4.67.0.20241221",
+]
+lint = [
+    "mypy>=1.14.1",
+    "types-requests>=2.32.0.20241016",
+    "types-tqdm>=4.67.0.20241221",
+]
+
+[tool.pdm]
+distribution = true
+
+[tool.setuptools_scm]
+fallback_version = "0.0.0"
+
+[tool.ruff]
+src = [
+    "src",
+]
+fix = true
+lint.select = [
+    "B",      # flake8-bugbear
+    "D",      # pydocstyle
+    "E",      # pycodestyle error
+    "F",      # Pyflakes
+    "I",      # isort
+    "RUF100", # Unused noqa directive
+    "S",      # flake8-bandit
+    "SIM",    # flake8-simplify
+    "UP",     # pyupgrade
+    "W",      # pycodestyle warning
+]
+lint.per-file-ignores."tests/*" = [
+    "S101",
+]
+lint.pydocstyle.convention = "google"
+
+[tool.codespell]
+write-changes = true
+check-filenames = true
+
+[tool.pyproject-fmt]
+indent = 4
+keep_full_version = true
+max_supported_python = "3.13"
+
+[tool.pytest.ini_options]
+addopts = "-l -s --durations=0"
+log_cli = true
+log_cli_level = "info"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_format = "%(asctime)s %(levelname)s %(message)s"
+minversion = "6.0"
+
+[tool.coverage.report]
+fail_under = 0
+
+[tool.coverage.run]
+source = [
+    "iptvtools",
+]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_unimported = true
+disallow_untyped_defs = true
+enable_error_code = [
+    "ignore-without-code",
+]
+exclude = [
+    "build",
+    "doc",
+]
+no_implicit_optional = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true

@@ -1,0 +1,26 @@
+name: Read the Docs Pull Request Preview
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  documentation-links:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Add Read the Docs preview's link to pull request
+        uses: readthedocs/actions/preview@cc0920454cf03ca8a3fbd3cbaa2ce2e509e70636 # v1.2
+        with:
+          project-slug: iptvtools
+on:
+  pull_request_target:
+    types:
+      - opened
+    paths:
+      - .github/workflows/readthedocs-preview.yml
+      - .readthedocs.yaml
+      - Makefile
+      - README.md
+      - docs/**
+      - pdm.dev.lock
+      - pdm.lock
+permissions:
+  pull-requests: write

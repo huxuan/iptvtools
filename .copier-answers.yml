@@ -1,0 +1,38 @@
+_commit: v0.0.65
+_src_path: gh:serious-scaffold/ss-python
+author_email: i@huxuan.org
+author_name: huxuan
+copyright_holder: huxuan
+copyright_license: MIT License
+copyright_year: 2019-2025
+coverage_threshold: 0
+default_py: '3.12'
+development_status: Beta
+max_py: '3.13'
+min_py: '3.10'
+module_name: iptvtools
+organization_name: huxuan.org
+package_name: iptvtools
+platforms:
+- macos
+- linux
+project_description: A set of scripts that help to better IPTV experience.
+project_keywords: iptvtools, iptvtools-cli, m3u filter
+project_name: IPTVTools
+readme_content: "## Features\n\nScripts currently provided:\n\n- iptvtools-cli filter\n\
+    \  - Merge from different resources.\n  - Check the tcp/udp connectivity.\n  -\
+    \ Filter by custom criteria, e.g. resolution.\n  - Match with templates and EPG.\n\
+    \  - Format the url with UDPxy if provided.\n  - Unify channels' titles.\n\nFeatures\
+    \ planned on the road:\n\n- [ ] Scan certain ip and port range to find new channels.\n\
+    - [ ] Establish a lightweight database for routine maintenance.\n\nBesides, all\
+    \ scripts should be lightweight and able to keep running regularly after proper\
+    \ configuration.\n\nLast but not least, any ideas, comments and suggestions are\
+    \ welcome!\n\n## Prerequisites\n\nTo filter by stream information, e.g., resolution/height,\
+    \ [ffmpeg](https://www.ffmpeg.org/) (or [ffprobe](https://www.ffmpeg.org/ffprobe.html)\
+    \ more precisely) is needed, please install according to the [documentation](https://www.ffmpeg.org/download.html).\n\
+    \n## Installation\n\nIt is recommended to manage iptvtools via [pipx](https://github.com/pypa/pipx):\n\
+    \n```shell\npipx install iptvtools\n```\n\n## Usage\n\nPlease refer to the [documentation](https://iptvtools.readthedocs.io/)\
+    \ while some useful information in [wiki](https://github.com/huxuan/iptvtools/wiki)."
+repo_name: iptvtools
+repo_namespace: huxuan
+repo_platform: github

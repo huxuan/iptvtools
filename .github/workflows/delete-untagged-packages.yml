@@ -1,0 +1,32 @@
+name: Delete Untagged Packages
+
+on:
+  schedule:
+    - cron: "0 2 * * 0"
+  workflow_dispatch: null
+
+permissions:
+  packages: write
+
+jobs:
+  delete-untagged-packages:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Delete untagged dev-cache packages
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: "iptvtools/dev-cache"
+          package-type: "container"
+          delete-only-untagged-versions: "true"
+      - name: Delete untagged development packages
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: "iptvtools/dev"
+          package-type: "container"
+          delete-only-untagged-versions: "true"
+      - name: Delete untagged production packages
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: "iptvtools"
+          package-type: "container"
+          delete-only-untagged-versions: "true"

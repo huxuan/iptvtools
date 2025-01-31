@@ -1,0 +1,136 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  pages-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@b2472ca4258a9ea3aee813980a0100a2261a42fc # v4.2
+        with:
+          cache: true
+          python-version: '3.12'
+          version: 2.22.3
+          cache-dependency-path: |
+            ./pdm.dev.lock
+            ./pdm.lock
+      - run: env | sort
+      - run: make dev-doc
+      - run: make doc
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: public
+  pages:
+    needs:
+      - pages-build
+    permissions:
+      id-token: write
+      pages: write
+    runs-on: ubuntu-24.04
+    steps:
+      - id: deployment
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+  container-publish:
+    permissions:
+      packages: write
+    runs-on: ubuntu-24.04
+    steps:
+      - run: env | sort
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up authentication
+        run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+      - name: Set up BuildKit
+        run: |
+          docker context create builder
+          docker buildx create builder --name container --driver docker-container --use
+          docker buildx inspect --bootstrap --builder container
+      - name: Build the dev container
+        run: |
+          docker buildx build . \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --cache-from type=registry,ref=ghcr.io/${{ github.repository }}/dev-cache:py${{ matrix.python-version }} \
+            --file .devcontainer/Dockerfile \
+            --load \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }}-${{ github.ref_name }} \
+            --target dev
+      - name: Test the dev container
+        run: |
+          docker run --rm \
+            -e CI=true \
+            -v ${PWD}:/workspace \
+            ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            make dev lint test doc build
+      - name: Build the prod container
+        run: |
+          docker buildx build . \
+            --build-arg SCM_VERSION=${{ github.ref_name }} \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --file .devcontainer/Dockerfile \
+            --load \
+            --tag ghcr.io/${{ github.repository }}:py${{ matrix.python-version }} \
+            --tag ghcr.io/${{ github.repository }}:py${{ matrix.python-version }}-${{ github.ref_name }} \
+            --target prod
+      - name: Test the prod container
+        run: docker run --rm ghcr.io/${{ github.repository }}:py${{ matrix.python-version }}
+      - name: Push the dev container
+        run: |
+          docker buildx build . \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --cache-to type=registry,ref=ghcr.io/${{ github.repository }}/dev-cache:py${{ matrix.python-version }},mode=max \
+            --file .devcontainer/Dockerfile \
+            --push \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }} \
+            --tag ghcr.io/${{ github.repository }}/dev:py${{ matrix.python-version }}-${{ github.ref_name }} \
+            --target dev
+      - name: Push the prod container
+        run: |
+          docker buildx build . \
+            --build-arg SCM_VERSION=${{ github.ref_name }} \
+            --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+            --file .devcontainer/Dockerfile \
+            --push \
+            --tag ghcr.io/${{ github.repository }}:py${{ matrix.python-version }} \
+            --tag ghcr.io/${{ github.repository }}:py${{ matrix.python-version }}-${{ github.ref_name }} \
+            --target prod
+    strategy:
+      matrix:
+        python-version:
+          - '3.10'
+          - '3.11'
+          - '3.12'
+          - '3.13'
+  package-publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@b2472ca4258a9ea3aee813980a0100a2261a42fc # v4.2
+        with:
+          cache: true
+          python-version: '3.12'
+          version: 2.22.3
+          cache-dependency-path: |
+            ./pdm.dev.lock
+            ./pdm.lock
+      - run: env | sort
+      - env:
+          PDM_PUBLISH_PASSWORD: ${{ secrets.PDM_PUBLISH_PASSWORD }}
+          PDM_PUBLISH_USERNAME: ${{ vars.PDM_PUBLISH_USERNAME || '__token__' }}
+        run: make publish

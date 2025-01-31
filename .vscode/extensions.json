@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "DavidAnson.vscode-markdownlint",
+    "ExecutableBookProject.myst-highlight",
+    "charliermarsh.ruff",
+    "ms-python.mypy-type-checker",
+    "ms-python.python",
+    "ms-vscode-remote.remote-containers",
+    "richie5um2.vscode-sort-json",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

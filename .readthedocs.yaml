@@ -1,0 +1,37 @@
+build:
+  apt_packages:
+    - pipx
+  jobs:
+    post_checkout:
+      - git fetch --unshallow || true
+      # Cancel building pull requests when there aren't changed in the related files and folders.
+      # If there are no changes (git diff exits with 0) we force the command to return with 183.
+      # This is a special exit code on Read the Docs that will cancel the build immediately.
+      # Ref: https://docs.readthedocs.io/en/stable/build-customization.html#cancel-build-based-on-a-condition
+      - |
+        if [ "$READTHEDOCS_VERSION_TYPE" = "external" ] && git diff --quiet origin/main -- \
+          .github/workflows/readthedocs-preview.yml \
+          .readthedocs.yaml \
+          Makefile \
+          README.md \
+          docs/ \
+          pdm.dev.lock \
+          pdm.lock;
+        then
+          exit 183;
+        fi
+    post_system_dependencies:
+      - env | sort
+    pre_create_environment:
+      - PIPX_BIN_DIR=$READTHEDOCS_VIRTUALENV_PATH/bin pipx install pdm==2.22.3
+    post_install:
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH make dev-doc
+    post_build:
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH make mypy doc-coverage
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: true
+version: 2

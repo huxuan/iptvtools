@@ -1,0 +1,166 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "constraints": {
+        "pdm": "2.22.3",
+        "python": "==3.12"
+    },
+    "customManagers": [
+        {
+            "customType": "regex",
+            "datasourceTemplate": "pypi",
+            "description": "Match Python packages installed with pip/pipx",
+            "fileMatch": [
+                "^Makefile$",
+                "^README\\.md$",
+                "^\\.devcontainer/Dockerfile$",
+                "^\\.github/workflows/.+\\.yml$",
+                "^\\.gitlab/workflows/.+\\.yml$",
+                "^\\.readthedocs\\.yaml$",
+                "^\\.renovaterc\\.json$",
+                "^docs/.+\\.md$"            ],
+            "matchStrings": [
+                "pip install.* (?<depName>.*?)(\\[.*?\\])?==(?<currentValue>.*?)[\"\n]",
+                "pipx install( --force)? (?<depName>.*?)(\\[.*?\\])?==(?<currentValue>.*?)\\s",
+                "pipx list --short \\| grep -q \"(?<depName>.*?)(\\[.*?\\])? (?<currentValue>.*?)\""
+            ]
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "repology",
+            "depTypeTemplate": "debian",
+            "description": "Match debian packages installed in Dockerfiles",
+            "fileMatch": [
+                "^\\.devcontainer\\/Dockerfile$"            ],
+            "matchStrings": [
+                "# renovate: depName=(?<depName>.*?)\nARG .*?_VERSION=\"(?<currentValue>.*)\"\n"
+            ],
+            "versioningTemplate": "deb"
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "pypi",
+            "depNameTemplate": "pdm",
+            "description": "Match pdm version specified in setup-pdm GitHub Action",
+            "fileMatch": [
+                "^\\.github/workflows/.+\\.yml$"            ],
+            "matchStrings": [
+                "uses: pdm-project/setup-pdm[\\s\\S]+?\\sversion: (?<currentValue>.*)\n"
+            ]
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "pypi",
+            "depNameTemplate": "pdm",
+            "description": "Match pdm version specified in the renovate constraints",
+            "fileMatch": [
+                "^\\.renovaterc\\.json$"            ],
+            "matchStrings": [
+                "\"pdm\": \"(?<currentValue>.*)\""
+            ]
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "github-runners",
+            "depTypeTemplate": "github-runner",
+            "description": "Match GitHub runner defined in GitHub Actions matrix strategy",
+            "fileMatch": [
+                "^\\.github/workflows/.+\\.yml$",
+                "^template/.*\\.github.*/workflows/.+\\.yml(\\.jinja)?$"
+            ],
+            "matchStrings": [
+                "# renovate: github-runner\n\\s+- (os: )?(?<depName>.*?)-(?<currentValue>.*)\n"
+            ],
+            "versioningTemplate": "docker"
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "npm",
+            "description": "Match npm packages used with npx",
+            "fileMatch": [
+                "^\\.github/workflows/.+\\.yml$",
+                "^\\.gitlab/workflows/.+\\.yml$"            ],
+            "matchStrings": [
+                "--package (?<depName>.+?)@(?<currentValue>.+?)\\s"
+            ],
+            "versioningTemplate": "docker"
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "git-tags",
+            "depNameTemplate": "https://github.com/serious-scaffold/ss-python.git",
+            "depTypeTemplate": "copier-template",
+            "description": "Match template version specified in .copier-answers.yml",
+            "fileMatch": [
+                "^\\.copier-answers\\.yml$"
+            ],
+            "matchStrings": [
+                "_commit: (?<currentValue>.*?)\n"
+            ],
+            "versioningTemplate": "semver"
+        }
+    ],
+    "extends": [
+        "config:best-practices",
+        ":enablePreCommit",
+        ":maintainLockFilesWeekly",
+        ":semanticCommitTypeAll(build)"
+    ],
+    "packageRules": [
+        {
+            "description": "Update lock files for development dependencies",
+            "matchUpdateTypes": [
+                "lockFileMaintenance"
+            ],
+            "postUpgradeTasks": {
+                "commands": [
+                    "pdm update --lockfile pdm.dev.lock --no-default --dev --no-sync --update-eager"
+                ]
+            }
+        },
+        {
+            "commitMessageTopic": "serious-scaffold-python",
+            "description": "Update template with copier when a new version is released",
+            "matchDepTypes": [
+                "copier-template"
+            ],
+            "postUpgradeTasks": {
+                "commands": [
+                    "git stash",
+                    "pip install copier==9.4.1",
+                    "copier update --skip-answered --defaults --vcs-ref {{{newVersion}}}"
+                ]
+            },
+            "semanticCommitScope": "copier-template"
+        },
+        {
+            "description": "Group pdm Python package and version specified in setup-pdm GitHub Action",
+            "groupName": "pdm",
+            "matchDatasources": [
+                "github-tags",
+                "pypi"
+            ],
+            "matchDepNames": [
+                "pdm"
+            ]
+        },
+        {
+            "description": "Group renovate docker tag and pre-commit-hooks tag",
+            "groupName": "renovate",
+            "matchDatasources": [
+                "docker",
+                "github-tags"
+            ],
+            "matchDepNames": [
+                "ghcr.io/renovatebot/renovate",
+                "renovatebot/pre-commit-hooks"
+            ]
+        },
+        {
+            "description": "Group debian packages to avoid failure when multiple packages are outdated",
+            "groupName": "debian packages",
+            "matchDepTypes": [
+                "debian"
+            ]
+        }
+    ]
+}

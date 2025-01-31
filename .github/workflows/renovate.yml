@@ -1,0 +1,53 @@
+name: Renovate
+jobs:
+  renovate:
+    container:
+      env:
+        LOG_LEVEL: debug
+        RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["^git", "^pdm", "^pip", "^copier", "^find"]'
+        RENOVATE_BRANCH_PREFIX: renovate-github/
+        RENOVATE_ENABLED: ${{ vars.RENOVATE_ENABLED || true }}
+        RENOVATE_ENABLED_MANAGERS: '["pep621", "github-actions", "regex", "pre-commit"]'
+        RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
+        RENOVATE_PLATFORM: github
+        RENOVATE_REPOSITORIES: '["${{ github.repository }}"]'
+        RENOVATE_REPOSITORY_CACHE: enabled
+      image: ghcr.io/renovatebot/renovate:39.142.0@sha256:46a64a301af13fdf1ce5590b44d7c6b7d1037f4e5af9acb6536e2aa010462abd
+      options: "--user root"
+    runs-on: ubuntu-24.04
+    steps:
+      - run: env | sort
+      - id: generate-token
+        name: Generate a token with GitHub App if App ID exists
+        if: vars.BOT_APP_ID
+        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - name: Warn if use GITHUB_TOKEN
+        run: |
+          if [ -z "${{ steps.generate-token.outputs.token || secrets.PAT }}" ]; then
+            echo "# :warning: GITHUB_TOKEN is used for renovate" >> $GITHUB_STEP_SUMMARY
+            echo "The GITHUB_TOKEN is used instead of a bot token or PAT and will not emit the checks for the pull requests." >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Warn if RENOVATE_GIT_AUTHOR is set while using GitHub App token
+        if: steps.generate-token.outputs.token && vars.RENOVATE_GIT_AUTHOR
+        run: |
+          echo "# :warning: `RENOVATE_GIT_AUTHOR` is set explicitly while using GitHub App token" >> $GITHUB_STEP_SUMMARY
+          echo "Generally, Renovate automatically detects the git author and email using the token. However, explicitly setting the `RENOVATE_GIT_AUTHOR` will override this behavior." >> $GITHUB_STEP_SUMMARY
+      - name: Run Renovate
+        env:
+          RENOVATE_GIT_AUTHOR: ${{ vars.RENOVATE_GIT_AUTHOR }}
+          RENOVATE_PLATFORM_COMMIT: ${{ steps.generate-token.outputs.token && true || false }}
+          RENOVATE_TOKEN: ${{ steps.generate-token.outputs.token || secrets.PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$RENOVATE_TOKEN" ]; then
+            echo "RENOVATE_TOKEN is not properly configured, skipping ..."
+          else
+            renovate $RENOVATE_EXTRA_FLAG
+          fi
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "*/15 0-3 * * 1"
+  workflow_dispatch: null
