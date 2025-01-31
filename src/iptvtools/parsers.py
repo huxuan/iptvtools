@@ -9,11 +9,8 @@ Email: i(at)huxuan.org
 import os.path
 import re
 import tempfile
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Iterator
-    from typing import Any
+from collections.abc import Iterator
+from typing import Any
 
 import requests
 

@@ -15,16 +15,12 @@ from subprocess import (
     Popen,
     TimeoutExpired,
 )
-from typing import TYPE_CHECKING
+from typing import Any
 from urllib.parse import urlparse
 
 import requests
 
 from iptvtools.config import Config
-
-if TYPE_CHECKING:
-    from typing import Any
-
 
 PROBE_COMMAND = (
     "ffprobe -hide_banner -show_streams -select_streams v -of json=c=1 -v quiet"
@@ -111,7 +107,7 @@ def check_udp_connectivity(url: str, timeout: int | None = None) -> bool:
     try:
         if sock.recv(10240):
             return True
-    except socket.timeout:
+    except TimeoutError:
         pass
     return False
 

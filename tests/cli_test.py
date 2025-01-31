@@ -13,9 +13,9 @@ def test_cli() -> None:
     assert "Usage" in result.output
 
 
-def test_cli_run() -> None:
-    """Test for run subcommand of the cli."""
+def test_cli_filter_help() -> None:
+    """Test the help for filter subcommand of the cli."""
     runner = CliRunner()
-    result = runner.invoke(cli, "run")
+    result = runner.invoke(cli, ["filter", "--help"])
     assert result.exit_code == 0
-    assert not result.output
+    assert "Show this message and exit." in result.output

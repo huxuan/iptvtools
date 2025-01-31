@@ -12,24 +12,53 @@ import random
 import re
 import sys
 import time
-from typing import TYPE_CHECKING
+from typing import Any
 
 from tqdm import tqdm
 
 from iptvtools import parsers, utils
 from iptvtools.constants import defaults, tags
 
-if TYPE_CHECKING:
-    from argparse import Namespace
-    from typing import Any
-
 
 class Playlist:
     """Playlist model."""
 
-    def __init__(self, args: Namespace) -> None:
+    def __init__(
+        self,
+        channel_exclude: str,
+        channel_include: str,
+        group_exclude: str,
+        group_include: str,
+        max_height: int,
+        min_height: int,
+        inputs: list[str],
+        interval: int,
+        skip_connectivity_check: bool,
+        output: str,
+        replace_group_by_source: bool,
+        resolution_on_title: bool,
+        sort_keys: list[str],
+        templates: list[str],
+        timeout: int,
+        udpxy: str,
+    ) -> None:
         """Init for Playlist."""
-        self.args = args
+        self.channel_exclude = channel_exclude
+        self.channel_include = channel_include
+        self.group_exclude = group_exclude
+        self.group_include = group_include
+        self.max_height = max_height
+        self.min_height = min_height
+        self.inputs = inputs
+        self.interval = interval
+        self.skip_connectivity_check = skip_connectivity_check
+        self.output = output
+        self.replace_group_by_source = replace_group_by_source
+        self.resolution_on_title = resolution_on_title
+        self.sort_keys = sort_keys
+        self.templates = templates
+        self.timeout = timeout
+        self.udpxy = udpxy
         self.data: dict[str, Any] = {}
         self.id_url: dict[str, Any] = {}
         self.inaccessible_urls: set[str] = set()
@@ -53,27 +82,27 @@ class Playlist:
 
             entry = self.data[url]
             params_dict = entry.get("params", {})
-            if self.args.replace_group_by_source:
+            if self.replace_group_by_source:
                 params_dict["group-title"] = self.data[url]["source"]
             params = " ".join(
                 [f'{key}="{value}"' for key, value in params_dict.items()]
             )
             duration = entry["duration"]
             title = entry["title"]
-            if self.args.resolution_on_title:
+            if self.resolution_on_title:
                 height = self.data[url].get("height")
                 title += f" [{utils.height_to_resolution(height)}]"
 
             res.append(f"{tags.INF}:{duration} {params},{title}\n{url}")
 
-        with open(self.args.output, "w", encoding="utf-8") as f:
+        with open(self.output, "w", encoding="utf-8") as f:
             f.write("\n".join(res))
 
     def parse(self) -> None:
         """Parse contents."""
-        self._parse(self.args.inputs)
+        self._parse(self.inputs)
         logging.debug(self.data)
-        self._parse(self.args.templates, is_template=True)
+        self._parse(self.templates, is_template=True)
         logging.debug(self.data)
 
     def _parse(self, sources: list[str], is_template: bool = False) -> None:
@@ -104,29 +133,29 @@ class Playlist:
 
                     params = current_item.get("params", {})
                     group = params.get("group-title", "")
-                    if not skip and self.args.group_include:
-                        if re.search(self.args.group_include, group):
+                    if not skip and self.group_include:
+                        if re.search(self.group_include, group):
                             logging.debug(f"Group to include: `{group}`.")
                         else:
                             skip = True
                     if (
                         not skip
-                        and self.args.group_exclude
-                        and re.search(self.args.group_exclude, group)
+                        and self.group_exclude
+                        and re.search(self.group_exclude, group)
                     ):
                         skip = True
                         logging.debug(f"Group to exclude: `{group}`.")
 
                     title = current_item.get("title", "")
-                    if not skip and self.args.channel_include:
-                        if re.search(self.args.channel_include, title):
+                    if not skip and self.channel_include:
+                        if re.search(self.channel_include, title):
                             logging.debug(f"Channel to include: `{title}`.")
                         else:
                             skip = True
                     if (
                         not skip
-                        and self.args.channel_exclude
-                        and re.search(self.args.channel_exclude, title)
+                        and self.channel_exclude
+                        and re.search(self.channel_exclude, title)
                     ):
                         skip = True
                         logging.debug(f"Channel to exclude: `{title}`.")
@@ -140,8 +169,8 @@ class Playlist:
                             self.data[url]["params"].update(current_params)
                             self.data[url]["title"] = current_item["title"]
                     else:
-                        if self.args.udpxy:
-                            line = utils.convert_url_with_udpxy(line, self.args.udpxy)
+                        if self.udpxy:
+                            line = utils.convert_url_with_udpxy(line, self.udpxy)
                         current_item["source"] = source_name
                         self.data[line] = current_item
 
@@ -156,29 +185,24 @@ class Playlist:
         pbar = tqdm(urls, ascii=True)
         for url in pbar:
             status = "OK"
-            time.sleep(self.args.interval)
-            if self.args.skip_connectivity_check:
+            time.sleep(self.interval)
+            if self.skip_connectivity_check:
                 status = "Skipped"
-            elif (
-                self.args.max_height
-                or self.args.min_height
-                or self.args.resolution_on_titl
-            ):
-                height = utils.check_stream(url, self.args.timeout)
+            elif self.max_height or self.min_height or self.resolution_on_title:
+                height = utils.check_stream(url, self.timeout)
                 if height == 0:
                     self.inaccessible_urls.add(url)
                     status = "Inaccessible (0 height)"
-                elif height < self.args.min_height:
+                elif height < self.min_height:
                     self.low_res_urls.add(url)
                     status = "Low Resolution"
                 elif (
-                    self.args.max_height != defaults.MAX_HEIGHT
-                    and height > self.args.max_height
+                    self.max_height != defaults.MAX_HEIGHT and height > self.max_height
                 ):
                     self.high_res_urls.add(url)
                     status = "High Resolution"
                 self.data[url]["height"] = height
-            elif not utils.check_connectivity(url, self.args.timeout):
+            elif not utils.check_connectivity(url, self.timeout):
                 self.inaccessible_urls.add(url)
                 status = "Inaccessible (No connectivity)"
             pbar.write(f"{url}, {status}!")
@@ -186,7 +210,7 @@ class Playlist:
     def __custom_sort(self, url: str) -> list[Any]:
         """Sort by tvg-id, resolution, template-order and title."""
         res = []
-        for key in self.args.sort_keys:
+        for key in self.sort_keys:
             entry = self.data[url]
             if key == "height":
                 res.append(-entry.get(key, 0))
