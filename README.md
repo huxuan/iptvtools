@@ -33,7 +33,7 @@ A set of scripts that help to better IPTV experience.
 
 Scripts currently provided:
 
-- [iptv-filter](https://iptvtools.readthedocs.io/en/latest/scripts/iptv-filter.html)
+- iptvtools-cli filter
   - Merge from different resources.
   - Check the tcp/udp connectivity.
   - Filter by custom criteria, e.g. resolution.

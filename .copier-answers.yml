@@ -1,4 +1,4 @@
-_commit: v0.0.64
+_commit: v0.0.65
 _src_path: gh:serious-scaffold/ss-python
 author_email: i@huxuan.org
 author_name: huxuan
@@ -19,7 +19,7 @@ platforms:
 project_description: A set of scripts that help to better IPTV experience.
 project_keywords: iptvtools, m3u, iptv-filter
 project_name: IPTVTools
-readme_content: "## Features\n\nScripts currently provided:\n\n- [iptv-filter](https://iptvtools.readthedocs.io/en/latest/scripts/iptv-filter.html)\n\
+readme_content: "## Features\n\nScripts currently provided:\n\n- iptvtools-cli filter\n\
     \  - Merge from different resources.\n  - Check the tcp/udp connectivity.\n  -\
     \ Filter by custom criteria, e.g. resolution.\n  - Match with templates and EPG.\n\
     \  - Format the url with UDPxy if provided.\n  - Unify channels' titles.\n\nFeatures\

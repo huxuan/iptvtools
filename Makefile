@@ -142,7 +142,7 @@ doc-watch:
 
 # Build documentation only from src.
 doc-build:
-	pdm run sphinx-build -a docs $(PUBLIC_DIR)
+	pdm run sphinx-build --fail-on-warning --write-all docs $(PUBLIC_DIR)
 
 # Generate html coverage reports with badge.
 doc-coverage: test-run

@@ -47,24 +47,24 @@ scripts.iptvtools-cli = "iptvtools.cli:cli"
 
 [dependency-groups]
 test = [
-    "coverage",
-    "pytest",
+    "coverage>=7.6.10",
+    "pytest>=8.3.4",
 ]
 doc = [
-    "autodoc-pydantic",
-    "coverage",
-    "furo",
-    "mypy[reports]",
-    "myst-parser",
-    "pytest",
-    "sphinx",
-    "sphinx-click",
-    "sphinx-design",
+    "autodoc-pydantic>=2.2.0",
+    "coverage>=7.6.10",
+    "furo>=2024.8.6",
+    "mypy[reports]>=1.14.1",
+    "myst-parser>=3.0.1",
+    "pytest>=8.3.4",
+    "sphinx>=7.4.7",
+    "sphinx-click>=6.0.0",
+    "sphinx-design>=0.6.1",
     "types-requests>=2.32.0.20241016",
     "types-tqdm>=4.67.0.20241221",
 ]
 lint = [
-    "mypy",
+    "mypy>=1.14.1",
     "types-requests>=2.32.0.20241016",
     "types-tqdm>=4.67.0.20241221",
 ]
