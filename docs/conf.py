@@ -10,7 +10,7 @@ from importlib import metadata
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 author = "huxuan"
-copyright = "2023, huxuan"
+copyright = "2019-2025, huxuan"
 project = "IPTVTools"
 release = metadata.version("iptvtools")
 version = ".".join(release.split(".")[:2])
