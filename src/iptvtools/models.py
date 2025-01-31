@@ -63,7 +63,8 @@ class Playlist:
 
             res.append(f"{tags.INF}:{duration} {params},{title}\n{url}")
 
-        open(self.args.output, "w", encoding="utf-8").write("\n".join(res))
+        with open(self.args.output, "w", encoding="utf-8") as f:
+            f.write("\n".join(res))
 
     def parse(self) -> None:
         """Parse contents."""

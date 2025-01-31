@@ -17,17 +17,18 @@ import requests
 from iptvtools.constants import patterns
 
 
-def parse_content_to_lines(content: str) -> Iterator[str]:
+def parse_content_to_lines(content: str, timeout: int | None = None) -> Iterator[str]:
     """Universal interface to split content into lines."""
     if os.path.isfile(content):
-        fp = open(content, encoding="utf-8")
+        with open(content, encoding="utf-8") as fp:
+            for line in fp:
+                yield re.sub(r"[^\S ]+", "", line.strip())
     else:
-        fp = tempfile.TemporaryFile(mode="w+t")
-        fp.write(requests.get(content).text)
-        fp.seek(0)
-    for line in fp:
-        yield re.sub(r"[^\S ]+", "", line.strip())
-    fp.close()
+        with tempfile.TemporaryFile(mode="w+t") as fp:
+            fp.write(requests.get(content, timeout=timeout).text)
+            fp.seek(0)
+            for line in fp:
+                yield re.sub(r"[^\S ]+", "", line.strip())
 
 
 def parse_tag_inf(line: str) -> dict[str, Any]:

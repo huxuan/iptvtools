@@ -80,9 +80,10 @@ def main() -> None:
 
     logging.basicConfig(level=args.log_level.upper())
 
-    if args.max_height or args.min_height or args.resolution_on_title:
-        if shutil.which("ffprobe") is None:
-            raise exceptions.FFmpegNotInstalledError()
+    if (
+        args.max_height or args.min_height or args.resolution_on_title
+    ) and shutil.which("ffprobe") is None:
+        raise exceptions.FFmpegNotInstalledError()
 
     Config.init(args.config)
     playlist = Playlist(args)
