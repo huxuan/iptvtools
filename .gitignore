@@ -1,4 +1,5 @@
 # Custom
+*.m3u
 *.swp
 .DS_Store
 Pipfile
