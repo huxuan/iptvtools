@@ -6,7 +6,7 @@ iptv-filter
 Usage
 -----
 
-.. program-output:: iptv-filter -h
+TODO(huxuan): show help message here
 
 Example
 -------
