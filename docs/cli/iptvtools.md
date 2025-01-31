@@ -1,4 +1,4 @@
-# IPTVTools CLI
+# IPTVTools
 
 ```{eval-rst}
 .. click:: iptvtools.cli:cli
