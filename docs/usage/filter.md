@@ -1,34 +1,55 @@
-Selected Parameters
-===================
+# Filter
+
+## Reference
+
+<project:/cli/filter.md>
+
+## Example
+
+There is a [well-maintained IPTV list](https://gist.github.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820) only for Beijing Unicom and a [well-maintained templates & EPG](http://epg.51zmt.top:8000/) mainly for China. So for me::
+
+```bash
+$ iptv-filter \
+-i https://gist.githubusercontent.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820/raw/11107d2dcfe2f5785e7ada94bb44c0cd349191c5/bj-unicom-iptv.m3u \
+-t http://epg.51zmt.top:8000/test.m3u
+```
+
+With UDPXY, it becomes::
+
+```bash
+$ iptv-filter \
+-i https://gist.githubusercontent.com/sdhzdmzzl/93cf74947770066743fff7c7f4fc5820/raw/11107d2dcfe2f5785e7ada94bb44c0cd349191c5/bj-unicom-iptv.m3u \
+-t http://epg.51zmt.top:8000/test.m3u \
+-u http://192.168.0.1:8888
+```
+
+Just replace `http://192.168.0.1:8888` with corresponding UDPXY prefix should be OK.
+
+## Selected Parameters
 
 Here is some further explanation for those not so obvious parameters.
 
-GROUP_EXCLUDE
--------------
+### GROUP_EXCLUDE
 
 Filter the playlist depends on the group title with a blacklist (regular expression).
 Note that, it has higher priority than the whitelist ``GROUP_INCLUDE``.
 
-GROUP_INCLUDE
--------------
+### GROUP_INCLUDE
 
 Filter the playlist depends on the group title with a whitelist (regular expression).
 Note that, if set, only groups match the pattern will be included.
 
-CHANNEL_EXCLUDE
----------------
+### CHANNEL_EXCLUDE
 
 Filter the playlist depends on the channel title by a blacklist (regular expression).
 Note that, it has higher priority than the whitelist ``CHANNEL_INCLUDE``.
 
-CHANNEL_INCLUDE
----------------
+### CHANNEL_INCLUDE
 
 Filter the playlist depends on the channel title by a whitelist (regular expression).
 Note that, if set, only channels match the pattern will be included.
 
-MIN_HEIGHT
-----------
+### MIN_HEIGHT
 
 HEIGHT is a dominant factor of stream quality,
 where 1080 in height means 1080p.
@@ -36,10 +57,9 @@ It is necessary to set this filter
 if the stream is supposed to be shown on high resolution screens,
 e.g., a 4K TV.
 
-CONFIG
-------
+### CONFIG
 
-`CONFIG <https://github.com/huxuan/iptvtools/blob/master/config.json>`_
+[CONFIG](https://github.com/huxuan/iptvtools/blob/master/config.json)
 is a customized configuration to unify ``title`` and ``id``.
 ``title`` is the exact title which will be shown and
 the ``id`` is used for potential match with the template.
@@ -63,24 +83,21 @@ For example, entry ``"CCTV-1": "中央1套"`` will convert ``CCTV-11`` to ``中�
 So, in generally,
 only keep those necessary entries and keep it as simple as possible.
 
-SORT_KEYS
----------
+### SORT_KEYS
 
 List of keys to sort the channels. Valid options currently supported are
 `tvg-id`, `height` and `title`. By default, it will work the same as
 `-s tvg-id resolution title`, and you can change the order as you want.
 If you want to have more keys to be supported, just let me know.
 
-TEMPLATES
----------
+### TEMPLATES
 
 A m3u playlist with well-maintained information to cooperate with EPG.
-Please refer to `Well‐maintained templates & EPGs <https://github.com/huxuan/iptvtools/wiki/Well%E2%80%90maintained-templates-&-EPGs>`_.
+Please refer to [Well‐maintained templates & EPGs](https://github.com/huxuan/iptvtools/wiki/Well%E2%80%90maintained-templates-&-EPGs).
 
-BTW, there is also a list `Well‐maintained playlists <https://github.com/huxuan/iptvtools/wiki/Well%E2%80%90maintained-playlists>`_.
+BTW, there is also a list [Well‐maintained playlists](https://github.com/huxuan/iptvtools/wiki/Well%E2%80%90maintained-playlists).
 
-TIMEOUT
--------
+### TIMEOUT
 
 TIMEOUT is used to check the connectivity.
 Direct check which only fetch the response header tends to be fast.
@@ -88,17 +105,15 @@ But it usually takes seconds to probe stream information
 depends on your network (bandwidth and latency).
 For me, it is about 3 to 5 seconds.
 
-UDPXY
------
+### UDPXY
 
 If the IPTV streams is forwarded by UDPXY,
 setting it will convert all the urls automatically.
-For examples, with UDPXY ``http://192.168.0.1:8888/``,
-``rtp://123.45.67.89:1234`` will be converted to
-``http://192.168.0.1:8888/rtp/123.45.67.89:1234``.
+For examples, with UDPXY `http://192.168.0.1:8888/`,
+`rtp://123.45.67.89:1234` will be converted to
+`http://192.168.0.1:8888/rtp/123.45.67.89:1234`.
 
-SKIP_CONNECTIVITY_CHECK
------------------------
+### SKIP_CONNECTIVITY_CHECK
 
 Skip any connectivity check (to be used to just apply title and id unifiers)
 use in combination with `-I 0`

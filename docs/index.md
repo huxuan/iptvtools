@@ -3,8 +3,7 @@
 ```{toctree}
 :hidden:
 Overview <self>
-scripts
-parameters
+usage/index
 management/index
 development/index
 advanced/index

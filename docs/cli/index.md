@@ -1,7 +1,7 @@
 # CLI Reference
 
-```{eval-rst}
-.. click:: iptvtools.cli:cli
-  :prog: iptvtools-cli
-  :nested: full
+```{toctree}
+:maxdepth: 1
+iptvtools
+filter
 ```
