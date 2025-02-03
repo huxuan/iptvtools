@@ -29,7 +29,7 @@ repos:
         files: .pre-commit-config.yaml
       - id: trailing-whitespace
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 39.142.0
+    rev: 39.156.1
     hooks:
       - id: renovate-config-validator
   - repo: local
