@@ -46,5 +46,5 @@ jobs:
         run: >
           npx
           --package conventional-changelog-conventionalcommits@8.0.0
-          --package semantic-release@24.2.1
+          --package semantic-release@24.2.3
           semantic-release
