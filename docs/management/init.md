@@ -7,7 +7,7 @@ Please refer to pipx's installation instructions [here](https://pipx.pypa.io/sta
 Once pipx is set up, install the copier for project generation using the following command:
 
 ```bash
-pipx install copier==9.4.1
+pipx install copier==9.5.0
 ```
 
 ## Create the Repository
