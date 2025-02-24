@@ -64,7 +64,7 @@ prerequisites:
 	pipx list --short | grep -q "codespell 2.4.1" || pipx install --force codespell[toml]==2.4.1
 	pipx list --short | grep -q "pdm 2.22.3" || pipx install --force pdm==2.22.3
 	pipx list --short | grep -q "pre-commit 4.1.0" || pipx install --force pre-commit==4.1.0
-	pipx list --short | grep -q "pyproject-fmt 2.5.0" || pipx install --force pyproject-fmt==2.5.0
+	pipx list --short | grep -q "pyproject-fmt 2.5.1" || pipx install --force pyproject-fmt==2.5.1
 	pipx list --short | grep -q "ruff 0.9.4" || pipx install --force ruff==0.9.4
 	pipx list --short | grep -q "watchfiles 1.0.4" || pipx install --force watchfiles==1.0.4
 
