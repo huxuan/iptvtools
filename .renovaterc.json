@@ -1,6 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "constraints": {
+        "copier": "9.4.1",
         "pdm": "2.22.3",
         "python": "==3.12"
     },
@@ -83,20 +84,6 @@
                 "--package (?<depName>.+?)@(?<currentValue>.+?)\\s"
             ],
             "versioningTemplate": "docker"
-        },
-        {
-            "customType": "regex",
-            "datasourceTemplate": "git-tags",
-            "depNameTemplate": "https://github.com/serious-scaffold/ss-python.git",
-            "depTypeTemplate": "copier-template",
-            "description": "Match template version specified in .copier-answers.yml",
-            "fileMatch": [
-                "^\\.copier-answers\\.yml$"
-            ],
-            "matchStrings": [
-                "_commit: (?<currentValue>.*?)\n"
-            ],
-            "versioningTemplate": "semver"
         }
     ],
     "extends": [
@@ -116,22 +103,6 @@
                     "pdm update --lockfile pdm.dev.lock --no-default --dev --no-sync --update-eager"
                 ]
             }
-        },
-        {
-            "commitMessageTopic": "serious-scaffold-python",
-            "description": "Update template with copier when a new version is released",
-            "matchDepTypes": [
-                "copier-template"
-            ],
-            "postUpgradeTasks": {
-                "commands": [
-                    "git stash",
-                    "install-tool python 3.12.10",
-                    "pip install copier==9.4.1",
-                    "copier update --skip-answered --defaults --vcs-ref {{{newVersion}}}"
-                ]
-            },
-            "semanticCommitScope": "copier-template"
         },
         {
             "description": "Group pdm Python package and version specified in setup-pdm GitHub Action",

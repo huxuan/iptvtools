@@ -4,10 +4,10 @@ jobs:
     container:
       env:
         LOG_LEVEL: debug
-        RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["^git", "^pdm", "^pip", "^copier", "^find"]'
+        RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["^find", "^pdm"]'
         RENOVATE_BRANCH_PREFIX: renovate-github/
         RENOVATE_ENABLED: ${{ vars.RENOVATE_ENABLED || true }}
-        RENOVATE_ENABLED_MANAGERS: '["pep621", "github-actions", "regex", "pre-commit"]'
+        RENOVATE_ENABLED_MANAGERS: '["copier", "github-actions", "pep621", "pre-commit", "regex"]'
         RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
         RENOVATE_PLATFORM: github
         RENOVATE_REPOSITORIES: '["${{ github.repository }}"]'
