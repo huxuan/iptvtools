@@ -126,6 +126,7 @@
             "postUpgradeTasks": {
                 "commands": [
                     "git stash",
+                    "install-tool python 3.12.10",
                     "pip install copier==9.4.1",
                     "copier update --skip-answered --defaults --vcs-ref {{{newVersion}}}"
                 ]
