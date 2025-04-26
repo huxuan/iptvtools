@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "constraints": {
-        "copier": "9.4.1",
+        "copier": "==9.4.1",
         "pdm": "2.22.3",
         "python": "==3.12"
     },
